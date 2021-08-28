@@ -1,7 +1,6 @@
 import React from 'react';
 import 'chartjs-adapter-date-fns';
 import {Bar, Line, Pie} from 'react-chartjs-2';
-import hoursToMilliseconds from 'date-fns/esm/hoursToMilliseconds';
 
 class Chart extends React.Component {
 
@@ -16,12 +15,19 @@ class Chart extends React.Component {
                 type: 'time',
                 time: {
                     unit: 'day',
+                    stepSize: 3,
+                    tooltipFormat: 'DD/MM/YYYY HH:mm',
                     displayFormat: {
                         day: "DD MMM",
-                        hour: "hh"
+                        hour: "HH"
                     }
                 },
                 ticks: {
+                    major: {
+                        enabled: true,
+                        fontStyle: 'bold',
+                        fontSize: 14 
+                    },
                     fontColor: '#ff0000',
                     autoSkip: true
                 }
@@ -30,7 +36,10 @@ class Chart extends React.Component {
                 ticks: {
                     fontColor: '#ff0000',
                     suggestedMin: 0,
-                    suggestedMax: 30
+                    suggestedMax: 30,
+                    callback: function(value, index, values) {
+                        return value + '°C';
+                    }
                 },
                 gridLines: {
                     display: true,
@@ -42,8 +51,11 @@ class Chart extends React.Component {
     }
  
     render() {
-        if(this.props.chartData != null && this.props.chartData.datasets != null && this.props.chartData.datasets[0] != null)
-            this.props.scales.x.time.unit = getBestAproximation(this.props.chartData.datasets[0].data)
+        if(this.props.chartData != null && this.props.chartData.datasets != null && this.props.chartData.datasets[0] != null) {
+            let aprox = getBestAproximation(this.props.chartData.datasets[0].data)
+            this.props.scales.x.time.unit = aprox.time.unit
+            this.props.scales.x.time.stepSize = aprox.time.stepSize
+        }
         return (
             <div>
                 <Line 
@@ -83,13 +95,13 @@ function getBestAproximation(data) {
     }
 
     if (years.length > 2) { // yearly
-        return 'year'
+        return {time:{unit:'year', stepSize: 1}}
     } else if (months.length > 4) { // monthly
-        return 'month'
+        return {time:{unit:'month', stepSize: 1}}
     } else if (days.length > 4) { // daily
-        return 'day'
+        return {time:{unit:'day', stepSize: 1}}
     } else { // hourly
-        return 'hour'
+        return {time:{unit:'hour', stepSize: 3}}
     }
 
 }

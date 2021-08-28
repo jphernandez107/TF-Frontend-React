@@ -31,7 +31,7 @@ class Grid extends React.Component {
                         <Section size = {columns.width[0]}>
                             <ChartCard />
                             {/*Enviar como prop la ubicacion del sensor que queremos traer la info*/}
-                            <ChartCard />
+                            {/* <ChartCard /> */}
                         </Section>
                         <Section size = {columns.width[1]}> 
                             <div className="card bg-gradient-primary">
@@ -115,7 +115,7 @@ class Grid extends React.Component {
       render() {
           const sectionClass = "col-lg-" + this.props.size + " connectedSortable ui-sortable"
           return(
-              <section class={sectionClass}> 
+              <section className={sectionClass}> 
                 {this.props.children}
               </section>
           )
