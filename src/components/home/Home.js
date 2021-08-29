@@ -1,36 +1,80 @@
 import React from 'react';
- 
-import Menu from '../menu/Menu';
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+
 import Sidebar from '../sidebar/Sidebar';
-import HeaderBody from './HeaderBody';
 import Grid from './Grid';
 
+const api = require('../../api/Api')
+
 class Home extends React.Component {
+
+    constructor(){
+        super();
+        this.state = {
+          locations: [],
+          greenhouses: []
+        }
+      }
  
+
+    componentDidMount() {
+        this.getGreenhouses()
+    }
+
+    getGreenhouses() {
+        var that = this;
+        var params = new URLSearchParams("")
+
+        api.getDataFromServer("locations/filter", params)
+        .then(function(json) {
+          that.setState({
+            locations: json
+          })
+          that.setUniqueGreenhouses(that) 
+        })
+        .catch(err => console.log(err))
+    }
+
+    setUniqueGreenhouses(that) {
+        let ghs = [...new Set(that.state.locations.map(location => location.greenhouse))]
+        var greenhouses = []
+        for (var gh of ghs) {
+            let name = "Invernadero " + gh
+            let href = "/greenhouse-" + gh
+            greenhouses.push({id: gh, name:name, href:href})
+        }
+        that.setState({
+            greenhouses: greenhouses
+        })
+        console.log(that.state.greenhouses)
+    }
+
     render() {
- 
-        const columns = {
+        
+        const columns = { // move to prop
             num: 2,
             width: [7, 5]
         }
 
+        let greenhouses = this.state.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
+        let greenhouseList = greenhouses.map((greenhouse) => 
+            <Route exact path={greenhouse.href} key={greenhouse.id}>
+                <Grid columns={columns} greenhouse={greenhouse} />
+            </Route>
+        )
+
         return(
  
-            <>
- 
-                <Menu />
-                <Sidebar columns = {columns}/> 
+            <Router>
+                <Sidebar greenhouses= {this.state.greenhouses} /> 
     
                 <div className="content-wrapper">
-                    {/* Content Header (Page header) --> MODULO */}
-                    <HeaderBody greenhouse = "Invernadero A"/>
-
-                    {/* Main content */}
-                    <Grid columns = {columns} />
-                    
-
+                    <Switch>
+                        {greenhouseList}
+                    </Switch>
                 </div>
-                {/* /.content-wrapper */}
+                
                 <footer className="main-footer">
                     <strong>Copyright &copy; 2021 Juan Pablo Hernández. </strong>
                     {"All rights reserved."}
@@ -39,7 +83,7 @@ class Home extends React.Component {
                     </div>
                 </footer>
  
-            </>
+            </Router>
  
         )
  

@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { Button, Row, InputGroup, FormControl } from 'react-bootstrap'
 
 import Chart from '../charts/Chart'
+const api = require('../../api/Api')
 
 class ChartCard extends Component {
 
@@ -60,7 +61,7 @@ class ChartCard extends Component {
     params.append("toDate", getStringFromDate(this.state.toDate))
     console.log(this.state.toDate)
 
-    getDataFromServer("ambient-temperature/filter", params)
+    api.getDataFromServer("ambient-temperature/filter", params)
       .then(function(json) {
         var dataSet = []
         for (var obj of json) 
@@ -128,13 +129,6 @@ class ChartCard extends Component {
     );
   }
 
-}
-
-function getDataFromServer(url = "", filterParams = null) {
-  console.log('http://192.168.0.100:5000/' + url + '?' + filterParams.toString())
-  return fetch('http://192.168.0.100:5000/' + url + '?' + filterParams.toString())
-    .then(response => response.json())
-    .catch(err => console.log(err))
 }
 
 function getDateFromString(dateString) {
