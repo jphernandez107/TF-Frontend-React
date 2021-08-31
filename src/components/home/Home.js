@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Sidebar from '../sidebar/Sidebar';
 import Grid from './Grid';
+import General from './General';
 import Menu from '../menu/Menu';
 
 const api = require('../../api/Api')
@@ -72,6 +73,9 @@ class Home extends React.Component {
                 <Menu />
     
                 <div className="content-wrapper">
+                    <Route exact path="/general" key="general">
+                        <General />
+                    </Route>
                     <Switch>
                         {greenhouseList}
                     </Switch>
