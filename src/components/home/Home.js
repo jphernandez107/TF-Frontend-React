@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Sidebar from '../sidebar/Sidebar';
 import Grid from './Grid';
+import Menu from '../menu/Menu';
 
 const api = require('../../api/Api')
 
@@ -43,6 +44,7 @@ class Home extends React.Component {
             let name = "Invernadero " + gh
             let href = "/greenhouse-" + gh
             greenhouses.push({id: gh, name:name, href:href})
+            greenhouses.push({id: gh, name:name, href:href, sections:[]})
         }
         that.setState({
             greenhouses: greenhouses
@@ -54,7 +56,7 @@ class Home extends React.Component {
         
         const columns = { // move to prop
             num: 2,
-            width: [7, 5]
+            width: [6, 6]
         }
 
         let greenhouses = this.state.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
@@ -68,6 +70,7 @@ class Home extends React.Component {
  
             <Router>
                 <Sidebar greenhouses= {this.state.greenhouses} /> 
+                <Menu />
     
                 <div className="content-wrapper">
                     <Switch>

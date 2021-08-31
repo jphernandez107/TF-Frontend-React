@@ -15,7 +15,6 @@ class ChartCard extends Component {
     let today = new Date()
     var yesterday = new Date()
     yesterday.setDate(today.getDate() - 1)
-    console.log("Constructor")
     this.state = {
       chartData: [{
           datasets: [{}],
@@ -33,10 +32,16 @@ class ChartCard extends Component {
   static defaultProps = {
       chartData: [{}],
       cardTitle: "Temperatura ambiente",
-      location: {
+      locations: [{
         id: 1,
         text: "A/1/A"
-      }
+      }],
+      apiUrl: "ambient-temperature/filter",
+      yUnit: "°C"
+  }
+
+  componentDidMount() {
+    this.updateChart()
   }
 
   handleChange(dates) {
@@ -56,20 +61,20 @@ class ChartCard extends Component {
   getChartData() {
     var that = this;
     var params = new URLSearchParams("")
-    params.append("locationIds", this.props.location.id)
+    for(var location of this.props.locations)
+      params.append("locationIds", location.id)
     params.append("fromDate", getStringFromDate(this.state.fromDate))
     params.append("toDate", getStringFromDate(this.state.toDate))
-    console.log(this.state.toDate)
 
-    api.getDataFromServer("ambient-temperature/filter", params)
+    api.getDataFromServer(this.props.apiUrl, params)
       .then(function(json) {
         var dataSet = []
         for (var obj of json) 
-          dataSet.push({ x: getDateFromString(obj.created_date), y: obj.value })
+          dataSet.push({ x: getDateFromString(obj.date), y: obj.value })
         that.setState({
           chartData: {
             datasets:[{
-              label: that.props.cardTitle + " en " + that.props.location.text,
+              label: "Promedio de " + that.props.cardTitle.toLowerCase(),
               fill: true,
               borderWidth: 1,
               lineTension: 0,
@@ -83,7 +88,6 @@ class ChartCard extends Component {
             }]
           }
         }) 
-        console.log(that.state.chartData)
       })
       .catch(err => console.log(err))
       
@@ -122,7 +126,7 @@ class ChartCard extends Component {
         </Card.Header>
         <Card.Body >
           <div className="tab-content p-0" >
-            <Chart chartData={this.state.chartData} height={300}/>
+            <Chart chartData={this.state.chartData} height={300} yUnit={this.props.yUnit} />
           </div>
         </Card.Body>
       </Card>

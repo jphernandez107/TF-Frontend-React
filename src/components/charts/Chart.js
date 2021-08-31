@@ -10,13 +10,13 @@ class Chart extends React.Component {
         legend: {
             display: false
         },
+        yUnit: "°C",
         scales: {
             x: {
                 type: 'time',
                 time: {
                     unit: 'day',
                     stepSize: 3,
-                    tooltipFormat: 'DD/MM/YYYY HH:mm',
                     displayFormat: {
                         day: "DD MMM",
                         hour: "HH"
@@ -55,6 +55,7 @@ class Chart extends React.Component {
             let aprox = getBestAproximation(this.props.chartData.datasets[0].data)
             this.props.scales.x.time.unit = aprox.time.unit
             this.props.scales.x.time.stepSize = aprox.time.stepSize
+            this.props.scales.y.ticks.callback = yU(this.props.yUnit)
         }
         return (
             <div>
@@ -72,6 +73,12 @@ class Chart extends React.Component {
         );
     }
 
+}
+
+const yU = (yUnit) => {
+    return (value, index, values) => {
+        return value + yUnit;
+    }
 }
 
 /**
