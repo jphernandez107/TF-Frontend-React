@@ -43,7 +43,6 @@ class Home extends React.Component {
         for (var gh of ghs) {
             let name = "Invernadero " + gh
             let href = "/greenhouse-" + gh
-            greenhouses.push({id: gh, name:name, href:href})
             greenhouses.push({id: gh, name:name, href:href, sections:[]})
         }
         that.setState({
