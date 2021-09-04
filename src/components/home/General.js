@@ -4,7 +4,20 @@ import SmallCard from '../cards/SmallCard';
 import Section from '../helpers/Section';
 import HeaderBody from './HeaderBody';
 
+const api = require('../../api/Api')
+
 class General extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            greenhouses: []
+        }
+    }
+
+    componentDidMount() {
+        getGreenhouses(this)
+    }
 
     static defaultProps = {
         greenhouses: [
@@ -26,13 +39,58 @@ class General extends Component {
                 <section className="content">
                     <div className="container-fluid">
                         <div className="row">
-                            {getSectionsPerGreenhouse(this.props.greenhouses)}
+                            {getSectionsPerGreenhouse(this.state.greenhouses)}
                         </div>
                     </div>
                 </section>
             </>
         )
     }
+}
+
+function getGreenhouses(that) {
+    api.getGreenhouses()
+    .then(function(json) {
+        var ghs = []
+        var greenhouses = that.state.greenhouses
+        for (var gh of json) {
+            if (greenhouses != undefined && greenhouses.length > 0) {
+                for (var localGh of greenhouses) {
+                    if (gh.greenhouse == localGh.id) {
+                        ghs.push({
+                            id:gh.greenhouse, 
+                            name: "Invernadero " + gh.greenhouse,
+                            href: "/greenhouse-" + gh.greenhouse,
+                            sensors: localGh.sensors
+                        })
+                    }
+                }
+            } else {
+                ghs.push({
+                    id:gh.greenhouse, 
+                    name: "Invernadero " + gh.greenhouse,
+                    href: "/greenhouse-" + gh.greenhouse
+                })
+            }
+        }
+
+        that.setState({
+            greenhouses: ghs
+        })
+    })
+    .catch(err => console.log(err))
+
+    var params = new URLSearchParams("");
+    params.append("locationIds", "2");
+
+    api.getRealTimeData(null, null, null, params)
+    .then(function(json) {
+        let greenhouses = that.state.greenhouses
+        greenhouses[0].sensors = json
+        that.setState({
+            greenhouses: greenhouses
+        })
+    })
 }
 
 function getSectionsPerGreenhouse(greenhouses) {
@@ -43,10 +101,10 @@ function getSectionsPerGreenhouse(greenhouses) {
             <Section size={widthSection} key={gh.id}>
                 <div className="col ">
                     <div className="row d-flex justify-content-center">
-                        <h3 mb-2 mt-4>{gh.name}</h3>
+                        <h3 className="mb-2 mt-4">{gh.name}</h3>
                     </div>
                     <div className="row">
-                        {getSmallCards()}
+                        {getSmallCards(gh)}
                     </div>
                 </div>
             </Section>
@@ -59,13 +117,114 @@ function getSectionsPerGreenhouse(greenhouses) {
 function getSmallCards(greenhouse) {
     var smallCards = []
 
-    smallCards.push(<SmallCard size={6} color="bg-warning" icon="fas fa-sun" unit="lux" value={3500}/>)
-    smallCards.push(<SmallCard size={6} color="bg-gray" icon="fas fa-moon" unit="lux" value={132}/>)
-    smallCards.push(<SmallCard size={12} color="bg-orange" value={27.3}/>)
-    smallCards.push(<SmallCard size={6} color="bg-lightblue" icon="fas fa-tint" unit="%"/>)
-    smallCards.push(<SmallCard size={6} color="bg-olive" icon="fas fa-seedling" unit="%" value={22}/>)
+    if (greenhouse.sensors && greenhouse.sensors.length > 0) {
+        for (var sensor of greenhouse.sensors) {
+            let cardStyle = getCustomSmallCard(sensor, greenhouse.href)
+            smallCards.push(<SmallCard cardStyle={cardStyle} key={sensor.sensor + greenhouse.id} />)
+        }
+    }
 
     return smallCards
+}
+
+function getCustomSmallCard(sensor, href) {
+    if(sensor.sensor == "lux") {
+        if (sensor.value > 150) {
+            // Dia
+            return dayLuxStyle(sensor.value, href)
+        } else {
+            // Noche
+            return nightLuxStyle(sensor.value, href)
+        }
+    } else if (sensor.sensor == "room_temperature") {
+        return ambientTempStyle(sensor.value, href)
+    } else if (sensor.sensor == "room_humidity") {
+        return ambientHumStyle(sensor.value, href)
+    } else if (sensor.sensor == "soil_humidity") {
+        return soilHumStyle(sensor.value, href)
+    }
+    return ambientTempStyle(sensor.value, href)
+}
+
+
+const dayLuxStyle = (value, href) => {
+    return {
+        cardTitle: "Intensidad de luz",
+        value: value,
+        unit: "lux",
+        icon: "fas fa-sun",
+        detailsSection: {
+            show: true,
+            title: "Detalles",
+            href: href
+        },
+        size:"6",
+        color: "bg-warning"
+    }
+}
+
+const nightLuxStyle = (value, href) => {
+    return {
+        cardTitle: "Intensidad de luz",
+        value: value,
+        unit: "lux",
+        icon: "fas fa-moon",
+        detailsSection: {
+            show: true,
+            title: "Detalles",
+            href: href
+        },
+        size:"6",
+        color: "bg-gray"
+    }
+}
+
+const ambientTempStyle = (value, href) => {
+    return {
+        cardTitle: "Temperatura ambiente",
+        value: value,
+        unit: "°C",
+        icon: "fas fa-thermometer-half",
+        detailsSection: {
+            show: true,
+            title: "Detalles",
+            href: href
+        },
+        size:"6",
+        color: "bg-orange"
+    }
+}
+
+const ambientHumStyle = (value, href) => {
+    return {
+        cardTitle: "Humedad ambiente",
+        value: value,
+        unit: "%",
+        icon: "fas fa-tint",
+        detailsSection: {
+            show: true,
+            title: "Detalles",
+            href: href
+        },
+        size:"6",
+        color: "bg-lightblue"
+    }
+}
+
+const soilHumStyle = (value, href) => {
+    return {
+        cardTitle: "Humedad de suelo",
+        value: value,
+        unit: "%",
+        icon: "fas fa-seedling",
+        detailsSection: {
+            show: true,
+            title: "Detalles",
+            href: href
+        },
+        size:"6",
+        color: "bg-olive"
+    }
 }
 
 export default General;
