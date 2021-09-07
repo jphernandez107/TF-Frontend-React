@@ -3,6 +3,7 @@ import React from 'react';
 import Menu from '../menu/Menu';
 import ChartCard from '../chartCard/ChartCard';
 import HeaderBody from '../home/HeaderBody';
+import Section from '../helpers/Section';
 
 class Grid extends React.Component {
     /**
@@ -41,17 +42,6 @@ class Grid extends React.Component {
       
     }
    
-  }
-
-  class Section extends React.Component {
-      render() {
-          const sectionClass = "col-lg-" + this.props.size + " connectedSortable ui-sortable"
-          return(
-              <section className={sectionClass}> 
-                {this.props.children}
-              </section>
-          )
-      }
   }
    
   export default Grid;

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Sidebar from '../sidebar/Sidebar';
 import Grid from './Grid';
+import General from './General';
 import Menu from '../menu/Menu';
 
 const api = require('../../api/Api')
@@ -30,7 +31,7 @@ class Home extends React.Component {
         api.getDataFromServer("locations/filter", params)
         .then(function(json) {
           that.setState({
-            locations: json
+            greenhouses: json
           })
           that.setUniqueGreenhouses(that) 
         })
@@ -38,17 +39,15 @@ class Home extends React.Component {
     }
 
     setUniqueGreenhouses(that) {
-        let ghs = [...new Set(that.state.locations.map(location => location.greenhouse))]
-        var greenhouses = []
+        let ghs = that.state.greenhouses
         for (var gh of ghs) {
-            let name = "Invernadero " + gh
-            let href = "/greenhouse-" + gh
-            greenhouses.push({id: gh, name:name, href:href, sections:[]})
+            gh.name = "Invernadero " + gh.greenhouse
+            gh.href = "/greenhouse-" + gh.greenhouse.toLowerCase()
+            gh.id = gh.greenhouse
         }
         that.setState({
-            greenhouses: greenhouses
+            greenhouses: ghs
         })
-        console.log(that.state.greenhouses)
     }
 
     render() {
@@ -59,10 +58,15 @@ class Home extends React.Component {
         }
 
         let greenhouses = this.state.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
-        let greenhouseList = greenhouses.map((greenhouse) => 
-            <Route exact path={greenhouse.href} key={greenhouse.id}>
-                <Grid columns={columns} greenhouse={greenhouse} />
-            </Route>
+        let greenhouseList = greenhouses.map(function(greenhouse) { 
+                if(greenhouse.id) {
+                    return(
+                        <Route exact path={greenhouse.href} key={greenhouse.id}>
+                            <Grid columns={columns} greenhouse={greenhouse} />
+                        </Route>
+                    )
+                }
+            }
         )
 
         return(
@@ -72,6 +76,9 @@ class Home extends React.Component {
                 <Menu />
     
                 <div className="content-wrapper">
+                    <Route exact path="/general" key="general">
+                        <General />
+                    </Route>
                     <Switch>
                         {greenhouseList}
                     </Switch>
