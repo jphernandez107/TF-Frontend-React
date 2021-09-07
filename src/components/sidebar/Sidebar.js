@@ -9,13 +9,18 @@ class Sidebar extends React.Component {
   render() {
 
     let greenhouses = this.props.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
-    let greenhouseList = greenhouses.map((greenhouse) => 
-        <Nav.Item key={greenhouse.id}>
-            <a href={greenhouse.href} className={"nav-link "}>
-                <i className="far fa-circle nav-icon"></i>
-                <p>{greenhouse.name}</p>
-            </a>
-        </Nav.Item>
+    let greenhouseList = greenhouses.map(function(greenhouse) { 
+            if (greenhouse.id) {
+                return (
+                    <Nav.Item key={"id:" + greenhouse.id}>
+                        <a href={greenhouse.href} className={"nav-link "}>
+                            <i className="far fa-circle nav-icon"></i>
+                            <p>{greenhouse.name}</p>
+                        </a>
+                    </Nav.Item>
+                )
+            }
+        }
     )
  
     return (

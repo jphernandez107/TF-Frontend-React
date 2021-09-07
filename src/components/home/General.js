@@ -38,7 +38,7 @@ class General extends Component {
                 <HeaderBody greenhouse = {"General"}/> 
                 <section className="content">
                     <div className="container-fluid">
-                        <div className="row">
+                        <div className="col">
                             {getSectionsPerGreenhouse(this.state.greenhouses)}
                         </div>
                     </div>
@@ -54,9 +54,9 @@ function getGreenhouses(that) {
         var ghs = []
         var greenhouses = that.state.greenhouses
         for (var gh of json) {
-            if (greenhouses != undefined && greenhouses.length > 0) {
+            if (greenhouses && greenhouses.length > 0) {
                 for (var localGh of greenhouses) {
-                    if (gh.greenhouse == localGh.id) {
+                    if (gh.greenhouse === localGh.id) {
                         ghs.push({
                             id:gh.greenhouse, 
                             name: "Invernadero " + gh.greenhouse,
@@ -69,7 +69,8 @@ function getGreenhouses(that) {
                 ghs.push({
                     id:gh.greenhouse, 
                     name: "Invernadero " + gh.greenhouse,
-                    href: "/greenhouse-" + gh.greenhouse
+                    href: "/greenhouse-" + gh.greenhouse,
+                    sensors: []
                 })
             }
         }
@@ -77,20 +78,24 @@ function getGreenhouses(that) {
         that.setState({
             greenhouses: ghs
         })
+
+        var params = new URLSearchParams("");
+        for (var g of ghs) {
+            api.getRealTimeData([g.id], null, null, params)
+            .then(function(json) {
+                for (var s of json) {
+                    for (var ghy of ghs) {
+                        if(ghy.id === s.greenhouse) ghy.sensors.push(s)
+                    }
+                }
+                that.setState({
+                    greenhouses: ghs
+                })
+            })
+        }
     })
     .catch(err => console.log(err))
-
-    var params = new URLSearchParams("");
-    params.append("locationIds", "2");
-
-    api.getRealTimeData(null, null, null, params)
-    .then(function(json) {
-        let greenhouses = that.state.greenhouses
-        greenhouses[0].sensors = json
-        that.setState({
-            greenhouses: greenhouses
-        })
-    })
+    
 }
 
 function getSectionsPerGreenhouse(greenhouses) {
@@ -98,16 +103,16 @@ function getSectionsPerGreenhouse(greenhouses) {
     var widthSection = Math.floor(12/greenhouses.length)
     for (var gh of greenhouses) {
         sections.push(
-            <Section size={widthSection} key={gh.id}>
-                <div className="col ">
-                    <div className="row d-flex justify-content-center">
+            <div className="row" key={gh.id}>
+                <div className="col">
+                    <div className="row" key={gh.id + "-title"}>
                         <h3 className="mb-2 mt-4">{gh.name}</h3>
                     </div>
-                    <div className="row">
+                    <div className="row" key={gh.id + "-content"}>
                         {getSmallCards(gh)}
                     </div>
                 </div>
-            </Section>
+            </div>
         )
     }
 
@@ -158,7 +163,7 @@ const dayLuxStyle = (value, href) => {
             title: "Detalles",
             href: href
         },
-        size:"6",
+        size:"4",
         color: "bg-warning"
     }
 }
@@ -174,7 +179,7 @@ const nightLuxStyle = (value, href) => {
             title: "Detalles",
             href: href
         },
-        size:"6",
+        size:"4",
         color: "bg-gray"
     }
 }
@@ -190,7 +195,7 @@ const ambientTempStyle = (value, href) => {
             title: "Detalles",
             href: href
         },
-        size:"6",
+        size:"4",
         color: "bg-orange"
     }
 }
@@ -206,7 +211,7 @@ const ambientHumStyle = (value, href) => {
             title: "Detalles",
             href: href
         },
-        size:"6",
+        size:"4",
         color: "bg-lightblue"
     }
 }
@@ -222,7 +227,7 @@ const soilHumStyle = (value, href) => {
             title: "Detalles",
             href: href
         },
-        size:"6",
+        size:"4",
         color: "bg-olive"
     }
 }
