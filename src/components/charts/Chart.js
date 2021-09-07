@@ -4,23 +4,30 @@ import {Bar, Line, Pie} from 'react-chartjs-2';
 
 class Chart extends React.Component {
 
-        static defaultProps = {
+    static defaultProps = {
         maintainAspectRatio: false,
         responsive: true,
         legend: {
             display: false
         },
+        yUnit: "°C",
         scales: {
             x: {
                 type: 'time',
                 time: {
-                    unit: 'hour',
-                    round: 'minutes',
+                    unit: 'day',
+                    stepSize: 3,
                     displayFormat: {
-                    day: "MMM DD"
+                        day: "DD MMM",
+                        hour: "HH"
                     }
                 },
                 ticks: {
+                    major: {
+                        enabled: true,
+                        fontStyle: 'bold',
+                        fontSize: 14 
+                    },
                     fontColor: '#ff0000',
                     autoSkip: true
                 }
@@ -29,7 +36,10 @@ class Chart extends React.Component {
                 ticks: {
                     fontColor: '#ff0000',
                     suggestedMin: 0,
-                    suggestedMax: 30
+                    suggestedMax: 30,
+                    callback: function(value, index, values) {
+                        return value + '°C';
+                    }
                 },
                 gridLines: {
                     display: true,
@@ -41,10 +51,14 @@ class Chart extends React.Component {
     }
  
     render() {
-        console.log("Esto es chart.js")
-        console.log(this.props.chartData)
+        if(this.props.chartData != null && this.props.chartData.datasets != null && this.props.chartData.datasets[0] != null) {
+            let aprox = getBestAproximation(this.props.chartData.datasets[0].data)
+            this.props.scales.x.time.unit = aprox.time.unit
+            this.props.scales.x.time.stepSize = aprox.time.stepSize
+            this.props.scales.y.ticks.callback = yU(this.props.yUnit)
+        }
         return (
-            <div className="chart">
+            <div>
                 <Line 
                     data = {this.props.chartData}
                     options = {{
@@ -53,9 +67,48 @@ class Chart extends React.Component {
                         legend: this.props.legend,
                         scales: this.props.scales
                     }}
+                    height = {this.props.height}
                 />
             </div>
         );
+    }
+
+}
+
+const yU = (yUnit) => {
+    return (value, index, values) => {
+        return value + yUnit;
+    }
+}
+
+/**
+ * 
+ * @param {array of jsons} data -> Data to be examinated
+ * @returns String time unit for chart x axis
+ */
+
+function getBestAproximation(data) {
+    let years = []
+    let months = []
+    let days = []
+    let hours = []
+    console.log(data)
+    for (var obj of data) {
+        let date = new Date(obj.x)
+        if(!years.some(i => i === date.getFullYear())) years.push(date.getFullYear())
+        if(!months.some(i => i === date.getMonth())) months.push(date.getMonth())
+        if(!days.some(i => i === date.getDate())) days.push(date.getDate())
+        if(!hours.some(i => i === date.getHours())) hours.push(date.getHours())
+    }
+
+    if (years.length > 2) { // yearly
+        return {time:{unit:'year', stepSize: 1}}
+    } else if (months.length > 4) { // monthly
+        return {time:{unit:'month', stepSize: 1}}
+    } else if (days.length > 4) { // daily
+        return {time:{unit:'day', stepSize: 1}}
+    } else { // hourly
+        return {time:{unit:'hour', stepSize: 3}}
     }
 
 }

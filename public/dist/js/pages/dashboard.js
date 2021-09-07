@@ -117,7 +117,7 @@ $(function () {
 
   /* Chart.js Charts */
   // Sales chart
-  var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d')
+  // var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d')
   // $('#revenue-chart').get(0).getContext('2d');
 
   var salesChartData = {
@@ -177,7 +177,7 @@ $(function () {
   // })
 
   // Donut Chart
-  var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
+  // var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
   var pieData = {
     labels: [
       'Instore Sales',
@@ -201,32 +201,32 @@ $(function () {
   // Create pie or douhnut chart
   // You can switch between pie and douhnut using the method below.
   // eslint-disable-next-line no-unused-vars
-  var pieChart = new Chart(pieChartCanvas, { // lgtm[js/unused-local-variable]
-    type: 'doughnut',
-    data: pieData,
-    options: pieOptions
-  })
+  // var pieChart = new Chart(pieChartCanvas, { // lgtm[js/unused-local-variable]
+  //   type: 'doughnut',
+  //   data: pieData,
+  //   options: pieOptions
+  // })
 
-  var params = new URLSearchParams("")
-  params.append("locationIds", "2")
-  params.append("fromDate", "15/8/2021 00:00:00")
+  // var params = new URLSearchParams("")
+  // params.append("locationIds", "2")
+  // params.append("fromDate", "15/8/2021 00:00:00")
 
-  getDataFromServer("soil-humidity/filter", params)
-    .then(function(json) {
-      var dataSet = []
-      for (var obj of json) {
-        dataSet.push({ x: getDateFromString(obj.created_date), y: obj.value })
-      }
+  // getDataFromServer("soil-humidity/filter", params)
+  //   .then(function(json) {
+  //     var dataSet = []
+  //     for (var obj of json) {
+  //       dataSet.push({ x: getDateFromString(obj.created_date), y: obj.value })
+  //     }
 
-      if (chart) chart.destroy()
+  //     if (chart) chart.destroy()
 
-      var chart = setGraphics(salesChartCanvas, dataSet, linesGraphChartOptions, "Humedad de suelo")
-    }, function(error) {
-      console.log(error)
-    })
+  //     var chart = setGraphics(salesChartCanvas, dataSet, linesGraphChartOptions, "Humedad de suelo")
+  //   }, function(error) {
+  //     console.log(error)
+  //   })
 
   // Sales graph chart
-  var linesGraphChartCanvas = $('#line-chart').get(0).getContext('2d')
+  // var linesGraphChartCanvas = $('#line-chart').get(0).getContext('2d')
   // $('#revenue-chart').get(0).getContext('2d')
 
   $('#temp_button').on('click', function(){
