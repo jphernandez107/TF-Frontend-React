@@ -76,7 +76,7 @@ class Home extends React.Component {
                 <Menu />
     
                 <div className="content-wrapper">
-                    <Route exact path="/general" key="general">
+                    <Route exact path="/" key="general">
                         <General />
                     </Route>
                     <Switch>

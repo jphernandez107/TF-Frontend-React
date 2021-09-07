@@ -9,6 +9,7 @@ class Sidebar extends React.Component {
   render() {
 
     let greenhouses = this.props.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
+    console.log(greenhouses)
     let greenhouseList = greenhouses.map(function(greenhouse) { 
             if (greenhouse.id) {
                 return (
@@ -46,9 +47,9 @@ class Sidebar extends React.Component {
                 <nav className="mt-2">
                     <Nav className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <Nav.Item>
-                            <a href="/general" className="nav-link">
+                            <a href="/" className="nav-link">
                                 <i className="nav-icon fas fa-th"></i>
-                                <p>General <span className="right badge badge-danger">Nuevo</span></p>
+                                <p>Inicio <span className="right badge badge-danger">Nuevo</span></p>
                             </a>
                         </Nav.Item>
                         <Nav.Item className="menu-open">

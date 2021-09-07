@@ -35,7 +35,7 @@ class General extends Component {
     render() {
         return(
             <>
-                <HeaderBody greenhouse = {"General"}/> 
+                <HeaderBody /> 
                 <section className="content">
                     <div className="container-fluid">
                         <div className="col">

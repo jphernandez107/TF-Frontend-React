@@ -17,7 +17,7 @@ class HeaderBody extends React.Component {
                         </div>{/* /.col */}
                         <div className="col-sm-6">
                             <ol className="breadcrumb float-sm-right">
-                                <li className="breadcrumb-item"><a href="#">Home</a></li>
+                                <li className="breadcrumb-item"><a href="/">Inicio</a></li>
                                 <li className="breadcrumb-item active">{this.props.greenhouse}</li>
                             </ol>
                         </div>{/* /.col */}
