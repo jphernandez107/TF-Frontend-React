@@ -13,7 +13,7 @@ class ChartCard extends Component {
   constructor(){
     super();
     let today = new Date()
-    var yesterday = new Date()
+    let yesterday = new Date()
     yesterday.setDate(today.getDate() - 1)
     this.state = {
       chartData: [{
@@ -61,19 +61,19 @@ class ChartCard extends Component {
   }
 
   getChartData() {
-    var that = this;
-    var params = new URLSearchParams("")
-    for(var location of this.props.locations)
+    let that = this;
+    let params = new URLSearchParams("")
+    for(let location of this.props.locations)
       params.append("greenhouses", location.greenhouse)
     params.append("fromDate", getStringFromDate(this.state.fromDate))
     params.append("toDate", getStringFromDate(this.state.toDate))
 
     api.getDataFromServer(this.props.apiUrl, params)
       .then(function(json) {
-        var dataSet = []
+        let dataSet = []
         let title = "Cargando..."
         if(json.title) title = json.title
-        for (var obj of json.data) 
+        for (let obj of json.data) 
           dataSet.push({ x: getDateFromString(obj.date), y: obj.value })
         that.setState({
           chartData: {
@@ -145,9 +145,9 @@ class ChartCard extends Component {
 }
 
 function getDateFromString(dateString) {
-  var dateTime = dateString.split(" ")
-  var date = dateTime[0].split("/")    // [0]dia [1]mes  [2]año
-  var time = dateTime[1].split(":")    // [0]hr  [1]min  [2]seg
+  let dateTime = dateString.split(" ")
+  let date = dateTime[0].split("/")    // [0]dia [1]mes  [2]año
+  let time = dateTime[1].split(":")    // [0]hr  [1]min  [2]seg
   return new Date(date[2], date[1]-1, date[0], time[0], time[1], time[2])
 }
 
