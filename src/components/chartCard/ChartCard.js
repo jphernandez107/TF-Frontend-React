@@ -25,7 +25,9 @@ class ChartCard extends Component {
         label: ""
       }],
       fromDate: yesterday,
-      toDate: today
+      toDate: today,
+      title: "Cargando...",
+      chartIcon: "fas fa-spinner"
     }
   }
 
@@ -33,7 +35,7 @@ class ChartCard extends Component {
       chartData: [{}],
       cardTitle: "Temperatura ambiente",
       locations: [{
-        id: 1,
+        greenhouse: "A",
         text: "A/1/A"
       }],
       apiUrl: "ambient-temperature/filter",
@@ -62,19 +64,21 @@ class ChartCard extends Component {
     var that = this;
     var params = new URLSearchParams("")
     for(var location of this.props.locations)
-      params.append("locationIds", location.id)
+      params.append("greenhouses", location.greenhouse)
     params.append("fromDate", getStringFromDate(this.state.fromDate))
     params.append("toDate", getStringFromDate(this.state.toDate))
 
     api.getDataFromServer(this.props.apiUrl, params)
       .then(function(json) {
         var dataSet = []
-        for (var obj of json) 
+        let title = "Cargando..."
+        if(json.title) title = json.title
+        for (var obj of json.data) 
           dataSet.push({ x: getDateFromString(obj.date), y: obj.value })
         that.setState({
           chartData: {
             datasets:[{
-              label: "Promedio de " + that.props.cardTitle.toLowerCase(),
+              label: "Promedio de " + title.toLowerCase(),
               fill: true,
               borderWidth: 1,
               lineTension: 0,
@@ -86,7 +90,12 @@ class ChartCard extends Component {
               pointBackgroundColor: '#efefef',
               data:dataSet
             }]
-          }
+          },
+          title: title,
+          yMax: json.max,
+          yMin: json.min,
+          yUnit: json.unit,
+          chartIcon: json.chartIcon
         }) 
       })
       .catch(err => console.log(err))
@@ -104,7 +113,7 @@ class ChartCard extends Component {
       <Card>
         <Card.Header className="ui-sortable-handle" style={{cursor: 'move'}}>
           <Card.Title>
-            <i className="fas fa-temperature-low mr-1" /> {this.props.cardTitle}
+            <i className={this.state.chartIcon + " mr-1"} /> {this.state.title}
           </Card.Title>
           <div className="card-tools">
             <ul className="nav nav-pills ml-auto">
@@ -126,7 +135,7 @@ class ChartCard extends Component {
         </Card.Header>
         <Card.Body >
           <div className="tab-content p-0" >
-            <Chart chartData={this.state.chartData} height={300} yUnit={this.props.yUnit} />
+            <Chart chartData={this.state.chartData} height={300} yUnit={this.state.yUnit} yMax={this.state.yMax} yMin={this.state.yMin}/>
           </div>
         </Card.Body>
       </Card>

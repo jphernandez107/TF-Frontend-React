@@ -9,7 +9,6 @@ class Sidebar extends React.Component {
   render() {
 
     let greenhouses = this.props.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
-    console.log(greenhouses)
     let greenhouseList = greenhouses.map(function(greenhouse) { 
             if (greenhouse.id) {
                 return (

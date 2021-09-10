@@ -4,6 +4,7 @@ import Menu from '../menu/Menu';
 import ChartCard from '../chartCard/ChartCard';
 import HeaderBody from '../home/HeaderBody';
 import Section from '../helpers/Section';
+const api = require('../../api/Api')
 
 class Grid extends React.Component {
     /**
@@ -18,7 +19,6 @@ class Grid extends React.Component {
         for (var i=0; i<columns.num; i++) {
             sectionColumnsSizes.push(columns.width[i])
         }
-        console.log(sectionColumnsSizes)
 
         return ( 
             <>
@@ -26,14 +26,7 @@ class Grid extends React.Component {
                 <section className="content">
                     <div className="container-fluid">
                         <div className="row">
-                            <Section size = {columns.width[0]}>
-                                <ChartCard apiUrl={"ambient-temperature/filter"} locations={[{id:2, text:""}]} cardTitle={"Temperatura ambiente"} yUnit="°C"/>
-                                <ChartCard apiUrl={"lux/filter"} locations={[{id:2, text:""}]} cardTitle={"Intensidad de luz"} yUnit=" lux"/>
-                            </Section>
-                            <Section size = {columns.width[1]}> 
-                                <ChartCard apiUrl={"ambient-humidity/filter"} locations={[{id:2, text:""}]} cardTitle={"Humedad ambiente"} yUnit="%"/>
-                                <ChartCard apiUrl={"soil-humidity/filter"} locations={[{id:2, text:""}]} cardTitle={"Humedad de suelo"} yUnit="%"/>
-                            </Section>
+                            {getCharts(this.props.greenhouse)}
                         </div>
                     </div>
                 </section>
@@ -42,6 +35,22 @@ class Grid extends React.Component {
       
     }
    
-  }
+}
+
+function getCharts(greenhouse) {
+
+    return (
+        <>
+            <Section size = {6}>
+                <ChartCard apiUrl={"ambient-temperature/filter"} locations={[{greenhouse:greenhouse.greenhouse, text:""}]}/>
+                <ChartCard apiUrl={"lux/filter"} locations={[{greenhouse:greenhouse.greenhouse, text:""}]}/>
+            </Section>
+            <Section size = {6}> 
+                <ChartCard apiUrl={"ambient-humidity/filter"} locations={[{greenhouse:greenhouse.greenhouse, text:""}]}/>
+                <ChartCard apiUrl={"soil-humidity/filter"} locations={[{greenhouse:greenhouse.greenhouse, text:""}]}/>
+            </Section>
+        </>
+    )
+}
    
   export default Grid;
