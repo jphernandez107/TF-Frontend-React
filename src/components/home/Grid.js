@@ -14,8 +14,8 @@ class Grid extends React.Component {
  
     render() {
         const columns = this.props.columns
-        var sectionColumnsSizes = []
-        for (var i=0; i<columns.num; i++) {
+        let sectionColumnsSizes = []
+        for (let i=0; i<columns.num; i++) {
             sectionColumnsSizes.push(columns.width[i])
         }
         console.log(sectionColumnsSizes)

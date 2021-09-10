@@ -93,7 +93,7 @@ function getBestAproximation(data) {
     let days = []
     let hours = []
     console.log(data)
-    for (var obj of data) {
+    for (let obj of data) {
         let date = new Date(obj.x)
         if(!years.some(i => i === date.getFullYear())) years.push(date.getFullYear())
         if(!months.some(i => i === date.getMonth())) months.push(date.getMonth())

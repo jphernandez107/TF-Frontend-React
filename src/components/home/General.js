@@ -51,11 +51,11 @@ class General extends Component {
 function getGreenhouses(that) {
     api.getGreenhouses()
     .then(function(json) {
-        var ghs = []
-        var greenhouses = that.state.greenhouses
-        for (var gh of json) {
+        let ghs = []
+        let greenhouses = that.state.greenhouses
+        for (let gh of json) {
             if (greenhouses && greenhouses.length > 0) {
-                for (var localGh of greenhouses) {
+                for (let localGh of greenhouses) {
                     if (gh.greenhouse === localGh.id) {
                         ghs.push({
                             id:gh.greenhouse, 
@@ -79,12 +79,12 @@ function getGreenhouses(that) {
             greenhouses: ghs
         })
 
-        var params = new URLSearchParams("");
-        for (var g of ghs) {
+        let params = new URLSearchParams("");
+        for (let g of ghs) {
             api.getRealTimeData([g.id], null, null, params)
             .then(function(json) {
-                for (var s of json) {
-                    for (var ghy of ghs) {
+                for (let s of json) {
+                    for (let ghy of ghs) {
                         if(ghy.id === s.greenhouse) ghy.sensors.push(s)
                     }
                 }
@@ -99,9 +99,9 @@ function getGreenhouses(that) {
 }
 
 function getSectionsPerGreenhouse(greenhouses) {
-    var sections =[]
-    var widthSection = Math.floor(12/greenhouses.length)
-    for (var gh of greenhouses) {
+    let sections =[]
+    let widthSection = Math.floor(12/greenhouses.length)
+    for (let gh of greenhouses) {
         sections.push(
             <div className="row" key={gh.id}>
                 <div className="col">
@@ -120,10 +120,10 @@ function getSectionsPerGreenhouse(greenhouses) {
 }
 
 function getSmallCards(greenhouse) {
-    var smallCards = []
+    let smallCards = []
 
     if (greenhouse.sensors && greenhouse.sensors.length > 0) {
-        for (var sensor of greenhouse.sensors) {
+        for (let sensor of greenhouse.sensors) {
             let cardStyle = getCustomSmallCard(sensor, greenhouse.href)
             smallCards.push(<SmallCard cardStyle={cardStyle} key={sensor.sensor + greenhouse.id} />)
         }

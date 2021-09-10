@@ -19,7 +19,7 @@ class SmallCard extends Component {
     }
 
     render() {
-        var detailsSection = <div></div>
+        let detailsSection = <div></div>
         if (this.props.cardStyle.detailsSection.show) {
             detailsSection = <>
                                 <a href={this.props.cardStyle.detailsSection.href} className="small-box-footer">

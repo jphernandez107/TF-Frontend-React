@@ -25,8 +25,8 @@ class Home extends React.Component {
     }
 
     getGreenhouses() {
-        var that = this;
-        var params = new URLSearchParams("")
+        let that = this;
+        let params = new URLSearchParams("")
 
         api.getDataFromServer("locations/filter", params)
         .then(function(json) {
@@ -40,7 +40,7 @@ class Home extends React.Component {
 
     setUniqueGreenhouses(that) {
         let ghs = that.state.greenhouses
-        for (var gh of ghs) {
+        for (let gh of ghs) {
             gh.name = "Invernadero " + gh.greenhouse
             gh.href = "/greenhouse-" + gh.greenhouse.toLowerCase()
             gh.id = gh.greenhouse
