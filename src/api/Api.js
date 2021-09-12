@@ -1,4 +1,4 @@
-const baseURL = 'http://192.168.0.92:5000/'
+const baseURL = 'http://greengbackend.herokuapp.com/'
 
 const getDataFromServer = (url = "", filterParams = null) => {
     return fetch(baseURL + url + '?' + filterParams.toString())
