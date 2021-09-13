@@ -12,7 +12,7 @@ class Menu extends React.Component {
                         <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
-                        <a href="/" className="nav-link">Home</a>
+                        <a href="/" className="nav-link">Inicio</a>
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
                         <a href="#" className="nav-link">Secciones/Filas</a>

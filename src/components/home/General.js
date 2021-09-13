@@ -205,7 +205,7 @@ const ambientHumStyle = (value, href) => {
         cardTitle: "Humedad ambiente",
         value: value,
         unit: "%",
-        icon: "fas fa-tint",
+        icon: "fas fa-humidity",
         detailsSection: {
             show: true,
             title: "Detalles",
