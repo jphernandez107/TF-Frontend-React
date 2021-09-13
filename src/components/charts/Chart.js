@@ -4,14 +4,9 @@ import {Bar, Line, Pie} from 'react-chartjs-2';
 
 class Chart extends React.Component {
 
-    static defaultProps = {
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-            display: false
-        },
-        yUnit: "°C",
-        scales: {
+    constructor() {
+        super()
+        this.scales = {
             x: {
                 type: 'time',
                 time: {
@@ -37,9 +32,7 @@ class Chart extends React.Component {
                     fontColor: '#ff0000',
                     suggestedMin: 0,
                     suggestedMax: 30,
-                    callback: function(value, index, values) {
-                        return value + '°C';
-                    }
+                    callback: null
                 },
                 gridLines: {
                     display: true,
@@ -49,14 +42,27 @@ class Chart extends React.Component {
             }
         }
     }
+
+    static defaultProps = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+            display: false
+        },
+        yUnit: "°C"
+        
+    }
  
     render() {
         if(this.props.chartData != null && this.props.chartData.datasets != null && this.props.chartData.datasets[0] != null) {
             let aprox = getBestAproximation(this.props.chartData.datasets[0].data)
-            this.props.scales.x.time.unit = aprox.time.unit
-            this.props.scales.x.time.stepSize = aprox.time.stepSize
-            this.props.scales.y.ticks.callback = yU(this.props.yUnit)
+            this.scales.x.time.unit = aprox.time.unit
+            this.scales.x.time.stepSize = aprox.time.stepSize
+            this.scales.y.ticks.callback = yU(this.props.yUnit)
         }
+        this.scales.y.suggestedMax = this.props.yMax
+        this.scales.y.suggestedMin = this.props.yMin
+
         return (
             <div>
                 <Line 
@@ -65,7 +71,7 @@ class Chart extends React.Component {
                         maintainAspectRatio: this.props.maintainAspectRatio,
                         responsive: this.props.responsive,
                         legend: this.props.legend,
-                        scales: this.props.scales
+                        scales: this.scales
                     }}
                     height = {this.props.height}
                 />

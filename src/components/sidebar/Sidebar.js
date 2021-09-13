@@ -9,17 +9,18 @@ class Sidebar extends React.Component {
   render() {
 
     let greenhouses = this.props.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
-    console.log(greenhouses)
     let greenhouseList = greenhouses.map(function(greenhouse) { 
             if (greenhouse.id) {
                 return (
                     <Nav.Item key={"id:" + greenhouse.id}>
                         <a href={greenhouse.href} className={"nav-link "}>
-                            <i className="far fa-circle nav-icon"></i>
+                            <i className="far fa-hand-holding-seedling nav-icon"></i>
                             <p>{greenhouse.name}</p>
                         </a>
                     </Nav.Item>
                 )
+            } else {
+                return(<></>)
             }
         }
     )
@@ -27,8 +28,9 @@ class Sidebar extends React.Component {
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             
-            <a href="index.html" className="brand-link">
-                <span className="brand-text font-weight-light">Green Greenhouse</span>
+            <a href="/" className="brand-link">
+                <img src="dist/img/green-greenhouse-logo.svg" alt="GreenGreenhouse Logo" class="brand-image img-circle elevation-3" style={{"opacity": 0.8}}/>
+                <span className="brand-text font-weight-light"> Green Greenhouse</span>
             </a>
 
             <div className="sidebar">
@@ -54,7 +56,7 @@ class Sidebar extends React.Component {
                         </Nav.Item>
                         <Nav.Item className="menu-open">
                             <a href="#" className="nav-link active">
-                                <i className="nav-icon fas fa-tachometer-alt"></i>
+                                <i className="nav-icon fas fa-hand-holding-seedling"></i>
                                 <p> Invernaderos <i className="right fas fa-angle-left"></i> </p>
                             </a>
                             <Nav className="nav nav-treeview">
