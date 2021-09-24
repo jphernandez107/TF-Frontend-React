@@ -33,21 +33,8 @@ class Home extends React.Component {
           that.setState({
             greenhouses: json
           })
-          that.setUniqueGreenhouses(that) 
         })
         .catch(err => console.log(err))
-    }
-
-    setUniqueGreenhouses(that) {
-        let ghs = that.state.greenhouses
-        for (let gh of ghs) {
-            gh.name = "Invernadero " + gh.greenhouse
-            gh.href = "/greenhouse-" + gh.greenhouse.toLowerCase()
-            gh.id = gh.greenhouse
-        }
-        that.setState({
-            greenhouses: ghs
-        })
     }
 
     render() {
@@ -58,16 +45,15 @@ class Home extends React.Component {
         }
 
         let greenhouses = this.state.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
-        let greenhouseList = greenhouses.map(function(greenhouse) { 
-                if(greenhouse.id) {
-                    return(
-                        <Route exact path={greenhouse.href} key={greenhouse.id}>
-                            <Grid columns={columns} greenhouse={greenhouse} />
-                        </Route>
-                    )
-                }
+        let greenhouseList = greenhouses.map(function(greenhouse) {
+            if(greenhouse.id) {
+                return(
+                    <Route exact path={greenhouse.href} key={greenhouse.id}>
+                        <Grid columns={columns} greenhouse={greenhouse} />
+                    </Route>
+                )
             }
-        )
+        })
 
         return(
  
