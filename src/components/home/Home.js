@@ -6,6 +6,7 @@ import Sidebar from '../sidebar/Sidebar';
 import Grid from './Grid';
 import General from './General';
 import Menu from '../menu/Menu';
+import LocationMap from './LocationMap';
 
 const api = require('../../api/Api')
 
@@ -68,6 +69,9 @@ class Home extends React.Component {
                     <Switch>
                         {greenhouseList}
                     </Switch>
+                    <Route exact path="/map" key="">
+                        <LocationMap/>
+                    </Route>
                 </div>
                 
                 <footer className="main-footer">
