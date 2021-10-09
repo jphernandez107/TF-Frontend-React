@@ -133,7 +133,7 @@ function getSmallCards(greenhouse) {
 }
 
 function getCustomSmallCard(sensor, href) {
-    if(sensor.sensor == "lux") {
+    if(sensor.sensor == "luz") {
         if (sensor.value > 150) {
             // Dia
             return dayLuxStyle(sensor.value, href)
@@ -141,11 +141,11 @@ function getCustomSmallCard(sensor, href) {
             // Noche
             return nightLuxStyle(sensor.value, href)
         }
-    } else if (sensor.sensor == "room_temperature") {
+    } else if (sensor.sensor == "temperatura_ambiente") {
         return ambientTempStyle(sensor.value, href)
-    } else if (sensor.sensor == "room_humidity") {
+    } else if (sensor.sensor == "humedad_ambiente") {
         return ambientHumStyle(sensor.value, href)
-    } else if (sensor.sensor == "soil_humidity") {
+    } else if (sensor.sensor == "humedad_suelo") {
         return soilHumStyle(sensor.value, href)
     }
     return ambientTempStyle(sensor.value, href)

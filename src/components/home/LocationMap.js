@@ -18,7 +18,7 @@ class LocationMap extends Component {
             greenhouses: [
                 {greenhouse:"A",sections:[
                     {section:"01",sectors:[{sector:"A"},{sector:"B"},{sector:"C"},{sector:"D"},{sector:"E"},{sector:"F"},{sector:"G"},{sector:"H"},{sector:"I"},{sector:"J"}]},
-                    {section:"02",sectors:[{sector:"A"},{sector:"B"},{sector:"C"},{sector:"D"},{sector:"E"},{sector:"F"},{sector:"G"},{sector:"H"},{sector:"I"},{sector:"J"}]},
+                    {section:"02",sectors:[{sector:"A"},{sector:"B"},{sector:"C"},{sector:"D"},{sector:"E"},{sector:"F"},{sector:"G"},{sector:"H"},{sector:"I"}]},
                     {section:"03",sectors:[{sector:"A"},{sector:"B"},{sector:"C"},{sector:"D"},{sector:"E"},{sector:"F"},{sector:"G"},{sector:"H"},{sector:"I"},{sector:"J"}]},
                     {section:"04",sectors:[{sector:"A"},{sector:"B"},{sector:"C"},{sector:"D"},{sector:"E"},{sector:"F"},{sector:"G"},{sector:"H"},{sector:"I"},{sector:"J"}]},
                     {section:"05",sectors:[{sector:"A"},{sector:"B"},{sector:"C"},{sector:"D"},{sector:"E"},{sector:"F"},{sector:"G"},{sector:"H"},{sector:"I"},{sector:"J"}]},
