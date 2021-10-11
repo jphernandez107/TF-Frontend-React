@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { Button, Row, InputGroup, FormControl } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 import Chart from '../charts/Chart'
 const api = require('../../api/Api')
@@ -33,13 +33,18 @@ class ChartCard extends Component {
 
   static defaultProps = {
       chartData: [{}],
-      cardTitle: "Temperatura ambiente",
+      sensorIds: [1],
       locations: [{
         greenhouse: "A",
         text: "A/1/A"
       }],
-      apiUrl: "ambient-temperature/filter",
-      yUnit: "°C"
+      chartMeta: {
+        chartTitle: "Temperatura ambiente",
+        chartIcon: "fas fa-thermometer-half",
+        yMax: null,
+        yMin: null,
+        yUnit: '°C'
+      }
   }
 
   componentDidMount() {
@@ -48,7 +53,6 @@ class ChartCard extends Component {
 
   handleChange(dates) {
     const [fromDate, toDate] = dates;
-    console.log(dates)
     this.setState({
       fromDate: fromDate,
       toDate: toDate
@@ -63,16 +67,18 @@ class ChartCard extends Component {
   getChartData() {
     let that = this;
     let params = new URLSearchParams("")
+    for(let sensorId of this.props.sensorIds)
+      params.append("sensorIds", sensorId)
     for(let location of this.props.locations)
       params.append("greenhouses", location.greenhouse)
     params.append("fromDate", getStringFromDate(this.state.fromDate))
     params.append("toDate", getStringFromDate(this.state.toDate))
 
-    api.getDataFromServer(this.props.apiUrl, params)
+    api.getDataFromServer(params)
       .then(function(json) {
         let dataSet = []
         let title = "Cargando..."
-        if(json.title) title = json.title
+        title = that.props.chartMeta.chartTitle
         for (let obj of json.data) 
           dataSet.push({ x: getDateFromString(obj.date), y: obj.value })
         that.setState({
@@ -92,10 +98,10 @@ class ChartCard extends Component {
             }]
           },
           title: title,
-          yMax: json.max,
-          yMin: json.min,
-          yUnit: json.unit,
-          chartIcon: json.chartIcon
+          yMax: that.props.chartMeta.yMax,
+          yMin: that.props.chartMeta.yMin,
+          yUnit: that.props.chartMeta.yUnit,
+          chartIcon: that.props.chartMeta.chartIcon
         }) 
       })
       .catch(err => console.log(err))
