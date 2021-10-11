@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import SmallCard from '../cards/SmallCard';
-import Section from '../helpers/Section';
 import HeaderBody from './HeaderBody';
 
 const api = require('../../api/Api')
@@ -11,35 +10,26 @@ class General extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            greenhouses: []
+            realTimeSensors: []
         }
     }
 
     componentDidMount() {
-        getGreenhouses(this)
+        getRealTimeData(this)
     }
 
     static defaultProps = {
-        greenhouses: [
-            {
-                id: "A",
-                name: "Invernadero A"
-            },
-            {
-                id: "B",
-                name: "Invernadero B"
-            }
-        ]
+        greenhouses: []
     }
 
     render() {
         return(
             <>
-                <HeaderBody /> 
+                <HeaderBody greenhouse={`Tablero`}/> 
                 <section className="content">
                     <div className="container-fluid">
                         <div className="col">
-                            {getSectionsPerGreenhouse(this.state.greenhouses)}
+                            {getSectionsPerGreenhouse(this.props.greenhouses, this.state.realTimeSensors)}
                         </div>
                     </div>
                 </section>
@@ -48,107 +38,63 @@ class General extends Component {
     }
 }
 
-function getGreenhouses(that) {
-    api.getGreenhouses()
+function getRealTimeData(that) {
+    api.getRealTimeData(null, null, null, null)
     .then(function(json) {
-        let ghs = []
-        let greenhouses = that.state.greenhouses
-        for (let gh of json) {
-            if (greenhouses && greenhouses.length > 0) {
-                for (let localGh of greenhouses) {
-                    if (gh.greenhouse === localGh.id) {
-                        ghs.push({
-                            id:gh.greenhouse, 
-                            name: "Invernadero " + gh.greenhouse,
-                            href: "/greenhouse-" + gh.greenhouse,
-                            sensors: localGh.sensors
-                        })
-                    }
-                }
-            } else {
-                ghs.push({
-                    id:gh.greenhouse, 
-                    name: "Invernadero " + gh.greenhouse,
-                    href: "/greenhouse-" + gh.greenhouse,
-                    sensors: []
-                })
-            }
-        }
-
         that.setState({
-            greenhouses: ghs
+            realTimeSensors: json
         })
-
-        let params = new URLSearchParams("");
-        for (let g of ghs) {
-            api.getRealTimeData([g.id], null, null, params)
-            .then(function(json) {
-                for (let s of json) {
-                    for (let ghy of ghs) {
-                        if(ghy.id === s.greenhouse) ghy.sensors.push(s)
-                    }
-                }
-                that.setState({
-                    greenhouses: ghs
-                })
-            })
-        }
     })
-    .catch(err => console.log(err))
-    
 }
 
-function getSectionsPerGreenhouse(greenhouses) {
+function getSectionsPerGreenhouse(greenhouses, realTimeSensors) {
     let sections =[]
-    let widthSection = Math.floor(12/greenhouses.length)
     for (let gh of greenhouses) {
-        sections.push(
-            <div className="row" key={gh.id}>
-                <div className="col">
-                    <div className="row" key={gh.id + "-title"}>
-                        <h3 className="mb-2 mt-4">{gh.name}</h3>
-                    </div>
-                    <div className="row" key={gh.id + "-content"}>
-                        {getSmallCards(gh)}
+        let realTimeSensorsByGreenhouse = realTimeSensors.filter(rtSensor => rtSensor.greenhouse === gh.greenhouse)
+        if (realTimeSensorsByGreenhouse.length > 0){
+            sections.push(
+                <div className="row" key={gh.id}>
+                    <div className="col">
+                        <div className="row" key={gh.id + "-title"}>
+                            <h3 className="mb-2 mt-4">{gh.name}</h3>
+                        </div>
+                        <div className="row" key={gh.id + "-content"}>
+                            {getSmallCards(gh, realTimeSensorsByGreenhouse)}
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 
     return sections
 }
 
-function getSmallCards(greenhouse) {
+function getSmallCards(greenhouse, realTimeSensorsByGreenhouse) {
     let smallCards = []
-
-    if (greenhouse.sensors && greenhouse.sensors.length > 0) {
-        for (let sensor of greenhouse.sensors) {
-            let cardStyle = getCustomSmallCard(sensor, greenhouse.href)
-            smallCards.push(<SmallCard cardStyle={cardStyle} key={sensor.sensor + greenhouse.id} />)
+    if (greenhouse.sensorIds && greenhouse.sensorIds.length > 0) {
+        for (let sensorId of greenhouse.sensorIds) {
+            let realTimeSensor = realTimeSensorsByGreenhouse.find(sensor => sensor.sensorId === sensorId)
+            let cardStyle = getCustomSmallCard(realTimeSensor, greenhouse.href)
+            smallCards.push(<SmallCard cardStyle={cardStyle} key={`sensor-${sensorId}-loc-${greenhouse.id}`} />)
         }
     }
 
     return smallCards
 }
 
-function getCustomSmallCard(sensor, href) {
-    if(sensor.sensor == "luz") {
-        if (sensor.value > 150) {
-            // Dia
-            return dayLuxStyle(sensor.value, href)
-        } else {
-            // Noche
-            return nightLuxStyle(sensor.value, href)
-        }
-    } else if (sensor.sensor == "temperatura_ambiente") {
-        return ambientTempStyle(sensor.value, href)
-    } else if (sensor.sensor == "humedad_ambiente") {
-        return ambientHumStyle(sensor.value, href)
-    } else if (sensor.sensor == "humedad_suelo") {
-        return soilHumStyle(sensor.value, href)
+function getCustomSmallCard(realTimeSensor, href) {
+    switch(realTimeSensor.sensorId) {
+        case 1:
+            return ambientTempStyle(realTimeSensor.value, href)
+        case 2:
+            return ambientHumStyle(realTimeSensor.value, href)
+        case 3:
+            if (realTimeSensor.value > 150) return dayLuxStyle(realTimeSensor.value, href) // Day
+            else return nightLuxStyle(realTimeSensor.value, href) // Night
+        default:
+            return soilHumStyle(realTimeSensor.value, href)
     }
-    return ambientTempStyle(sensor.value, href)
 }
 
 

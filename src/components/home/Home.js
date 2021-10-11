@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
 import Sidebar from '../sidebar/Sidebar';
@@ -8,34 +8,11 @@ import General from './General';
 import Menu from '../menu/Menu';
 import LocationMap from './LocationMap';
 
-const api = require('../../api/Api')
 
 class Home extends React.Component {
 
-    constructor(){
-        super();
-        this.state = {
-          locations: [],
-          greenhouses: []
-        }
-      }
- 
-
-    componentDidMount() {
-        this.getGreenhouses()
-    }
-
-    getGreenhouses() {
-        let that = this;
-        let params = new URLSearchParams("")
-
-        api.getDataFromServer("locations/filter", params)
-        .then(function(json) {
-          that.setState({
-            greenhouses: json
-          })
-        })
-        .catch(err => console.log(err))
+    static defaultProps = {
+        greenhouses: []
     }
 
     render() {
@@ -45,7 +22,7 @@ class Home extends React.Component {
             width: [6, 6]
         }
 
-        let greenhouses = this.state.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
+        let greenhouses = this.props.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
         let greenhouseList = greenhouses.map(function(greenhouse) {
             if(greenhouse.id) {
                 return(
@@ -59,12 +36,12 @@ class Home extends React.Component {
         return(
  
             <Router>
-                <Sidebar greenhouses= {this.state.greenhouses} /> 
-                <Menu />
+                <Sidebar greenhouses={this.props.greenhouses} /> 
+                <Menu greenhouses={this.props.greenhouses} />
     
                 <div className="content-wrapper">
                     <Route exact path="/" key="general">
-                        <General />
+                        <General greenhouses={this.props.greenhouses} />
                     </Route>
                     <Switch>
                         {greenhouseList}
