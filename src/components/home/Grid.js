@@ -24,7 +24,7 @@ class Grid extends React.Component {
 }
 
 function getSectionCharts(location) {
-    if (location.sensorIds.length > 1) {
+    if (location.sensorIds && location.sensorIds.length > 1) {
         return (
             <>
                 <Section size = {6}>
@@ -47,7 +47,7 @@ function getSectionCharts(location) {
 function getChart(section, location) {
     let sensorIds = location.sensorIds
     let charts = []
-    for (let i=section; i<sensorIds.length; i+=2) {
+    for (let i=section; sensorIds && i<sensorIds.length; i+=2) {
         charts.push(<ChartCard key={`chart-${sensorIds[i]}`} sensorIds={[sensorIds[i]]} chartMeta={getChartMeta(sensorIds[i])} location={[{greenhouse: location.greenhouse}]}/>)
     }
     return (charts)
