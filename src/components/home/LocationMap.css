@@ -1,0 +1,51 @@
+.sector-cell {
+    background-color: gray;
+    border: 1px solid black;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    width: 5vw;
+    height: 5vh;
+}
+
+.sector-cell:hover {
+    background-color: goldenrod;
+    border: 2px solid black;
+}
+
+.map-section-title {
+    background-color: goldenrod;
+    font-size: 1.5vw;
+    
+}
+
+.map-sector-value {
+    font-weight: bold;
+    font-size: 120%;
+    font-size: 1.5vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.map-sector-name {
+    font-weight: bold;
+    padding-left: 2px;
+    font-weight: 300;
+    font-size: 60%;
+}
+
+.section-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-section-col-container {
+    width: 5.5vw;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+

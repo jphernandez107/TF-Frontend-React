@@ -29,7 +29,7 @@ class Sidebar extends React.Component {
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             
             <a href="/" className="brand-link">
-                <img src="dist/img/green-greenhouse-logo.svg" alt="GreenGreenhouse Logo" class="brand-image img-circle elevation-3" style={{"opacity": 0.8}}/>
+                <img src="dist/img/green-greenhouse-logo.svg" alt="GreenGreenhouse Logo" className="brand-image img-circle elevation-3" style={{"opacity": 0.8}}/>
                 <span className="brand-text font-weight-light"> Green Greenhouse</span>
             </a>
 

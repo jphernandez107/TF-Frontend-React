@@ -24,7 +24,7 @@ const getRealTimeData = (greenhouses, sections, sectors, filterParams = new URLS
   if(sectors && sectors.length > 0) 
     for (let sec of sectors) 
       filterParams.append("sectors", sec)
-  return fetch(baseURL + "real-time/filter?" + filterParams.toString())
+  return fetch(baseURL + "locations/real-time/filter?" + filterParams.toString())
     .then(response => response.json())
     .catch(err => console.log(err))
 }

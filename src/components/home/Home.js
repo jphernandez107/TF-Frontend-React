@@ -47,7 +47,7 @@ class Home extends React.Component {
                         {greenhouseList}
                     </Switch>
                     <Route exact path="/map" key="">
-                        <LocationMap/>
+                        <LocationMap greenhouse={this.props.greenhouses[0]}/>
                     </Route>
                 </div>
                 
