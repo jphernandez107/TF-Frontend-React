@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-import './components/home/LocationMap.css';
+import './components/locationMap/LocationMap.css';
 
 // import Menu from './components/menu/Menu'
 import Home from './components/home/Home'
@@ -31,7 +31,6 @@ class App extends Component {
 
     api.getLocations(params)
     .then(function(json) {
-      console.log(json)
       that.setState({
         greenhouses: json
       })

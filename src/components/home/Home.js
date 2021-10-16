@@ -6,7 +6,7 @@ import Sidebar from '../sidebar/Sidebar';
 import Grid from './Grid';
 import General from './General';
 import Menu from '../menu/Menu';
-import LocationMap from './LocationMap';
+import LocationMap from '../locationMap/LocationMap';
 
 
 class Home extends React.Component {
@@ -36,19 +36,16 @@ class Home extends React.Component {
         return(
  
             <Router>
-                <Sidebar greenhouses={this.props.greenhouses} /> 
-                <Menu greenhouses={this.props.greenhouses} />
+                <Sidebar greenhouses={greenhouses} /> 
+                <Menu greenhouses={greenhouses} />
     
                 <div className="content-wrapper">
                     <Route exact path="/" key="general">
-                        <General greenhouses={this.props.greenhouses} />
+                        <General greenhouses={greenhouses} />
                     </Route>
                     <Switch>
                         {greenhouseList}
                     </Switch>
-                    <Route exact path="/map" key="">
-                        <LocationMap greenhouse={this.props.greenhouses[0]}/>
-                    </Route>
                 </div>
                 
                 <footer className="main-footer">

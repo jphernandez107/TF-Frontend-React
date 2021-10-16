@@ -1,29 +1,36 @@
+:root {
+    --dark-green: rgba(39, 78, 23, 1);
+    --light-green: rgba(172, 196, 87, 1);
+    --light-green-a3: rgba(172, 196, 87, 0.3);
+}
+
 .sector-cell {
-    background-color: gray;
+    background-color: var(--dark-green);
     border: 1px solid black;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     display: flex;
     align-items: flex-start;
     position: relative;
-    width: 5vw;
+    width: 4vw;
     height: 5vh;
-}
+    color:rgb(255, 255, 255);
+} 
 
 .sector-cell:hover {
-    background-color: goldenrod;
+    background-color: var(--light-green);
     border: 2px solid black;
+    color: black;
 }
 
 .map-section-title {
-    background-color: goldenrod;
-    font-size: 1.5vw;
-    
+    background-color: var(--light-green-a3);
+    font-size: 1vw;
 }
 
 .map-sector-value {
     font-weight: bold;
     font-size: 120%;
-    font-size: 1.5vw;
+    font-size: 1vw;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -34,7 +41,7 @@
     font-weight: bold;
     padding-left: 2px;
     font-weight: 300;
-    font-size: 60%;
+    font-size: 90%;
 }
 
 .section-col {
@@ -45,6 +52,14 @@
 
 .map-section-col-container {
     width: 5.5vw;
+    max-width: 100px;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+
+.map-section-title-container {
+    width: 4.5vw;
+    max-width: 100px;
     margin-left: 0.5%;
     margin-right: 0.5%;
 }

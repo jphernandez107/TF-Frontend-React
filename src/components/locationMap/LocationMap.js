@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 
 import Card from 'react-bootstrap/Card';
-import { Stage, Layer, Rect, Text, Group } from 'react-konva';
-import SmallCard from '../cards/SmallCard';
-import Section from '../helpers/Section';
-import HeaderBody from './HeaderBody';
+import Utils from '../../utils/Utils';
 
 import { Dropdown, DropdownButton } from 'react-bootstrap'
-
-const api = require('../../api/Api')
 
 class LocationMap extends Component {
 
@@ -43,13 +38,12 @@ class LocationMap extends Component {
 
     render() {
         const greenhouse = this.props.greenhouse
-        console.log(greenhouse)
+        const sensorDetail = Utils.getSensorDetailsById(this.state.sensorSelected)
 
         const onClick = (e) => {
-            console.log(e.target.value)
-
+            let sensorId = e.target.value
             this.setState({
-                greenhouse: greenhouse
+                sensorSelected: sensorId
             })
         }
 
@@ -57,7 +51,7 @@ class LocationMap extends Component {
             <Card className="m-3">
                 <Card.Header className="ui-sortable-handle" style={{cursor: 'move'}}>
                     <Card.Title>
-                        <i className={this.state.chartIcon + " mr-1"} /> {greenhouse.name}
+                        <i className={"far fa-map mr-1"} /> {greenhouse.name}
                     </Card.Title>
                     <div className="card-tools">
                         <ul className="nav nav-pills ml-auto">
@@ -65,8 +59,8 @@ class LocationMap extends Component {
 
                         </li>
                         <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-                            <DropdownButton title={"Sensor"}>
-                                {getDropdownOptions(onClick)}
+                            <DropdownButton title={sensorDetail.title}>
+                                {getDropdownOptions(onClick, greenhouse.sensorIds)}
                             </DropdownButton>
                         </li>
                         </ul>
@@ -74,7 +68,7 @@ class LocationMap extends Component {
                 </Card.Header>
                 <Card.Body >
                     <div className="tab-content p-0" >
-                        {map(greenhouse)}
+                        {map(greenhouse, parseInt(this.state.sensorSelected))}
                     </div>
                 </Card.Body>
             </Card>
@@ -82,19 +76,17 @@ class LocationMap extends Component {
     }
 }
 
-
-function map(greenhouse) {
-    return (getSectionsRect(greenhouse))
+function map(greenhouse, sensorSelected) {
+    return (getSectionsRect(greenhouse, sensorSelected))
 }
 
-function getSectionsRect(greenhouse) {
-
+function getSectionsRect(greenhouse, sensorSelected) {
     return (
         <div className="container">
             <div className="row d-flex justify-content-center">  
                 {
                     greenhouse.sections.map((section) => {
-                        return getSectionRect(section)
+                        return getSectionRect(section, sensorSelected)
                     })
                 }
             </div>
@@ -102,7 +94,7 @@ function getSectionsRect(greenhouse) {
     )
 }
 
-function getSectionRect(section) {
+function getSectionRect(section, sensorSelected) {
     return (
         <div className="d-flex flex-column map-section-col-container" key={`section-${section.section}`}>     
             <div className="row d-flex justify-content-center map-section-title-container">
@@ -112,7 +104,7 @@ function getSectionRect(section) {
                 <div className="d-flex flex-column">
                     {
                         section.sectors.map((sector) => {
-                            return getSectorRect(sector)
+                            return getSectorRect(sector, sensorSelected)
                         })
                     }
                 </div>
@@ -121,8 +113,9 @@ function getSectionRect(section) {
     )
 }
 
-function getSectorRect(sector) {
-    let text = sector.text ? sector.text : "X%"
+function getSectorRect(sector, sensorSelected) {
+    sensorSelected = sensorSelected ? sensorSelected : 1
+    let text = getTextFromSensor(sector.sensors, sensorSelected)
 
     return (
         <div 
@@ -134,29 +127,40 @@ function getSectorRect(sector) {
     )
 }
 
-function getDropdownOptions(onClick) {
-    // TODO: Traer los sensores que tiene disponible este invernadero y listarlos aquí
-    let temp = getRandomInt(3, 29)
-    let hum = getRandomInt(1, 100)
-    let hum2 = getRandomInt(3, 100)
-    let luz = getRandomInt(100, 1500)
-
+function getDropdownOptions(onClick, sensorIds) {
     return (
         <>
             <Dropdown.Header>Elija un sensor para mostrar</Dropdown.Header>
             <Dropdown.Divider />
-            <Dropdown.Item as="button" onClick={onClick} value={temp + "°C"}>Temperatura ambiente</Dropdown.Item>
-            <Dropdown.Item as="button" onClick={onClick} value={hum + "%"}>Humedad ambiente</Dropdown.Item>
-            <Dropdown.Item as="button" onClick={onClick} value={hum2 + "%"}>Humedad de suelo</Dropdown.Item>
-            <Dropdown.Item as="button" onClick={onClick} value={luz + " lux"}>Intensidad de luz</Dropdown.Item>
+            {getDropdownSensorItems(onClick, sensorIds)}
         </>
     )
+}
+
+function getDropdownSensorItems(onClick, sensorIds) {
+    sensorIds = sensorIds ? sensorIds : []
+    let items = []
+    for (let sensorId of sensorIds) {
+        const sensorDetail = Utils.getSensorDetailsById(sensorId)
+        items.push(
+            <Dropdown.Item as="button" onClick={onClick} value={sensorId} key={`dropdown-${sensorId}`}>
+                <i className={sensorDetail.icon + " mr-2"} />{sensorDetail.title}
+            </Dropdown.Item>
+        )
+    }
+    return (items)
+}
+
+function getTextFromSensor(sensors, sensorSelected) {
+    let sensor = sensors ? sensors.find((sensor) => sensor.id === sensorSelected) : undefined
+    let value = sensor ? sensor.value : getRandomInt(0, 50)
+
+    let unit = Utils.getSensorDetailsById(sensorSelected).unit
+    return `${parseInt(value)}${unit}`
 }
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
-
 
 export default LocationMap;

@@ -1,5 +1,5 @@
-// const baseURL = 'https://greengbackend.herokuapp.com/'
-const baseURL = 'http://localhost:5000/'
+const baseURL = 'https://greengbackend.herokuapp.com/'
+// const baseURL = 'http://localhost:5000/'
 
 const getDataFromServer = (filterParams = null) => {
     return fetch(baseURL + "data/filter" + '?' + filterParams.toString())
@@ -8,7 +8,7 @@ const getDataFromServer = (filterParams = null) => {
 }
 
 const getLocations = () => {
-  return fetch(baseURL + "locations/filter")
+  return fetch(baseURL + "locations/real-time/filter")
     .then(response => response.json())
     .catch(err => console.log(err))
 }
@@ -24,7 +24,7 @@ const getRealTimeData = (greenhouses, sections, sectors, filterParams = new URLS
   if(sectors && sectors.length > 0) 
     for (let sec of sectors) 
       filterParams.append("sectors", sec)
-  return fetch(baseURL + "locations/real-time/filter?" + filterParams.toString())
+  return fetch(baseURL + "real-time/filter?" + filterParams.toString())
     .then(response => response.json())
     .catch(err => console.log(err))
 }
