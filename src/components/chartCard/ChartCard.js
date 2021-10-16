@@ -127,13 +127,15 @@ class ChartCard extends Component {
             <ul className="nav nav-pills ml-auto">
               <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
                 <DatePicker className="nav-link" selected={this.state.fromDate} selectsStart timeInterval="10"
-                 onChange={(date) => this.handleChange(date, true)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy HH:mm" timeFormat="HH:mm" showTimeSelect
-                 startDate={this.state.fromDate} endDate={this.state.toDate} customInput={<ExampleCustomInput/>}/>                
+                 onChange={(date) => this.handleChange(date, true)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy HH:mm" timeFormat="HH:mm" 
+                 showTimeSelect startDate={this.state.fromDate} endDate={this.state.toDate} maxDate={new Date()} 
+                 customInput={<ExampleCustomInput/>}/>                
               </li>
               <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
                 <DatePicker className="nav-link" selected={this.state.toDate} selectsEnd
-                  onChange={(date) => this.handleChange(date, false)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy hh:mm" showTimeSelect
-                  startDate={this.state.fromDate} endDate={this.state.toDate}  minDate={this.state.fromDate} customInput={<ExampleCustomInput />}/>
+                  onChange={(date) => this.handleChange(date, false)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy HH:mm" timeFormat="HH:mm" 
+                  showTimeSelect startDate={this.state.fromDate} endDate={this.state.toDate} maxDate={new Date()} minDate={this.state.fromDate} 
+                  customInput={<ExampleCustomInput />}/>
               </li>
               <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
                 <button className={'card-button-filled'} variant="info" size="xs" onClick={this.updateChart.bind(this)} id={'updateButton'}>Actualizar</button>
