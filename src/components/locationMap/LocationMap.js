@@ -50,7 +50,7 @@ class LocationMap extends Component {
 
         return(
             <Card className="m-3">
-                <Card.Header className="ui-sortable-handle" style={{cursor: 'move'}}>
+                <Card.Header>
                     <Card.Title>
                         <i className={"far fa-map mr-1 card-icon"} /> {greenhouse.name}
                     </Card.Title>
@@ -60,9 +60,7 @@ class LocationMap extends Component {
 
                         </li>
                         <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-                            <DropdownButton title={sensorDetail.title} className="card-button">
-                                {getDropdownOptions(onClick, greenhouse.sensorIds)}
-                            </DropdownButton>
+                            {getDropdownButton(sensorDetail, greenhouse.sensorIds, onClick)}
                         </li>
                         </ul>
                     </div>
@@ -126,6 +124,35 @@ function getSectorRect(sector, sensorSelected) {
             <span className="map-sector-value">{text}</span>
         </div>
     )
+}
+
+function getDropdownButton(sensorDetail, sensorIds, onClick) {
+
+    const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+        <button
+            className="card-button-filled"
+            ref={ref}
+            onClick={(e) => {
+                e.preventDefault();
+                onClick(e);
+            }}
+        >
+            {children}
+            &#x25bc;
+        </button>
+      ));
+
+    return (
+        <Dropdown>
+        <Dropdown.Toggle as={CustomToggle} title={sensorDetail.title} className="card-button-filled">
+            <i className={`${sensorDetail.icon} mr-1 ml-2`} /> {`${sensorDetail.title} `}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+            {getDropdownOptions(onClick, sensorIds)}
+        </Dropdown.Menu>
+        </Dropdown>
+)
 }
 
 function getDropdownOptions(onClick, sensorIds) {

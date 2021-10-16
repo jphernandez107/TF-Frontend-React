@@ -1,5 +1,6 @@
 :root {
     --dark-green: rgba(39, 78, 23, 1);
+    --dark-green-a4: rgba(39, 78, 23, 0.4);
     --light-green: rgba(172, 196, 87, 1);
     --light-green-a3: rgba(172, 196, 87, 0.3);
 }

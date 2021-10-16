@@ -112,14 +112,14 @@ class ChartCard extends Component {
  
   render() {
     const ExampleCustomInput = React.forwardRef(({ value, onClick }, ref) => (
-      <Button variant="outline-primary" size="xs" className="example-custom-input card-button" onClick={onClick} ref={ref}>
+      <button variant="outline-primary" size="xs" className="example-custom-input card-button" onClick={onClick} ref={ref}>
         {value}
-      </Button>
+      </button>
     ));
 
     return (
       <Card>
-        <Card.Header className="ui-sortable-handle" style={{cursor: 'move'}}>
+        <Card.Header>
           <Card.Title>
             <i className={this.state.chartIcon + " mr-1 card-icon"} /> {this.state.title}
           </Card.Title>
@@ -136,7 +136,7 @@ class ChartCard extends Component {
                   startDate={this.state.fromDate} endDate={this.state.toDate}  minDate={this.state.fromDate} customInput={<ExampleCustomInput />}/>
               </li>
               <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-                <Button className={'card-button'} variant="info" size="xs" onClick={this.updateChart.bind(this)} id={'updateButton'}>Actualizar</Button>
+                <button className={'card-button-filled'} variant="info" size="xs" onClick={this.updateChart.bind(this)} id={'updateButton'}>Actualizar</button>
               </li>
             </ul>
           </div>
