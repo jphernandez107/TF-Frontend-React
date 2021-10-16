@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
 import Card from 'react-bootstrap/Card';
-import Utils from '../../utils/Utils';
 
 import { Dropdown, DropdownButton } from 'react-bootstrap'
+
+const Utils = require('../../utils/Utils');
 
 class LocationMap extends Component {
 
