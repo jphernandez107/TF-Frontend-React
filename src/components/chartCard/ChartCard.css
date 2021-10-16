@@ -1,0 +1,25 @@
+.card-button-filled > .dropdown-toggle, .card-button-filled, .card-button:hover, .card-button:active {
+    background-color: var(--dark-green);
+    border-color: var(--dark-green);
+    color: white;
+}
+
+.card-icon {
+    color: var(--dark-green)
+}
+
+.card-button, .card-button-filled:hover {
+    background-color: var(--light-green-a3);
+    color: var(--dark-green);
+    border-color: var(--dark-green-a4);
+}
+
+button { 
+    border-width: 1px;
+    border-radius: 6px;
+    width: fit-content;
+    height: min-content;
+    font-size: smaller;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}

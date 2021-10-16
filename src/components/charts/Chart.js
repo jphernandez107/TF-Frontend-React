@@ -112,8 +112,10 @@ function getBestAproximation(data) {
         return {time:{unit:'month', stepSize: 1}}
     } else if (days.length > 4) { // daily
         return {time:{unit:'day', stepSize: 1}}
-    } else { // hourly
+    } else if (days.length > 2){ // hourly
         return {time:{unit:'hour', stepSize: 3}}
+    } else {
+        return {time:{unit:'hour', stepSize: 1}}
     }
 
 }
