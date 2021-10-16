@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { Button } from 'react-bootstrap'
 
 import Chart from '../charts/Chart'
-import { Color } from '../../utils/Utils'
+const Utils = require('../../utils/Utils');
 const api = require('../../api/Api')
 
 class ChartCard extends Component {
@@ -92,8 +92,8 @@ class ChartCard extends Component {
               borderWidth: 1,
               lineTension: 0,
               spanGaps: false,
-              borderColor: Color.darkGreen(),
-              backgroundColor: Color.darkGreen(0.2),
+              borderColor: Utils.Color.darkGreen(),
+              backgroundColor: Utils.Color.darkGreen(0.2),
               pointRadius: false,
               pointHoverRadius: 7,
               data:dataSet
