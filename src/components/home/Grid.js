@@ -3,6 +3,7 @@ import React from 'react';
 import ChartCard from '../chartCard/ChartCard';
 import HeaderBody from '../home/HeaderBody';
 import Section from '../helpers/Section';
+import LocationMap from '../locationMap/LocationMap';
 
 class Grid extends React.Component {
  
@@ -14,6 +15,11 @@ class Grid extends React.Component {
                     <div className="container-fluid">
                         <div className="row">
                             {getSectionCharts(this.props.greenhouse)}
+                        </div>
+                        <div className="row">
+                            <Section size = {12}>
+                                <LocationMap greenhouse={this.props.greenhouse}/>
+                            </Section>
                         </div>
                     </div>
                 </section>

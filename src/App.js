@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
+import './components/locationMap/LocationMap.css';
 
 // import Menu from './components/menu/Menu'
 import Home from './components/home/Home'
