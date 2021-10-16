@@ -3,9 +3,10 @@ import Card from 'react-bootstrap/Card';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { Button, Row, InputGroup, FormControl } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 import Chart from '../charts/Chart'
+const Utils = require('../../utils/Utils');
 const api = require('../../api/Api')
 
 class ChartCard extends Component {
@@ -33,27 +34,33 @@ class ChartCard extends Component {
 
   static defaultProps = {
       chartData: [{}],
-      cardTitle: "Temperatura ambiente",
+      sensorIds: [1],
       locations: [{
         greenhouse: "A",
         text: "A/1/A"
       }],
-      apiUrl: "ambient-temperature/filter",
-      yUnit: "°C"
+      chartMeta: {
+        chartTitle: "Temperatura ambiente",
+        chartIcon: "fas fa-thermometer-half",
+        yMax: null,
+        yMin: null,
+        yUnit: '°C'
+      }
   }
 
   componentDidMount() {
     this.updateChart()
   }
 
-  handleChange(dates) {
-    const [fromDate, toDate] = dates;
-    console.log(dates)
+  handleChange(date, isFromDate) {
+    let fromDate = this.state.fromDate
+    let toDate = this.state.toDate
+    if(isFromDate) fromDate = date
+    else toDate = date
     this.setState({
       fromDate: fromDate,
       toDate: toDate
     });
-    
   }
 
   updateChart() {
@@ -63,16 +70,18 @@ class ChartCard extends Component {
   getChartData() {
     let that = this;
     let params = new URLSearchParams("")
+    for(let sensorId of this.props.sensorIds)
+      params.append("sensorIds", sensorId)
     for(let location of this.props.locations)
       params.append("greenhouses", location.greenhouse)
     params.append("fromDate", getStringFromDate(this.state.fromDate))
     params.append("toDate", getStringFromDate(this.state.toDate))
 
-    api.getDataFromServer(this.props.apiUrl, params)
+    api.getDataFromServer(params)
       .then(function(json) {
         let dataSet = []
         let title = "Cargando..."
-        if(json.title) title = json.title
+        title = that.props.chartMeta.chartTitle
         for (let obj of json.data) 
           dataSet.push({ x: getDateFromString(obj.date), y: obj.value })
         that.setState({
@@ -83,19 +92,18 @@ class ChartCard extends Component {
               borderWidth: 1,
               lineTension: 0,
               spanGaps: false,
-              borderColor: '#ff0000',
+              borderColor: Utils.Color.darkGreen(),
+              backgroundColor: Utils.Color.darkGreen(0.2),
               pointRadius: false,
               pointHoverRadius: 7,
-              pointColor: '#efefef',
-              pointBackgroundColor: '#efefef',
               data:dataSet
             }]
           },
           title: title,
-          yMax: json.max,
-          yMin: json.min,
-          yUnit: json.unit,
-          chartIcon: json.chartIcon
+          yMax: that.props.chartMeta.yMax,
+          yMin: that.props.chartMeta.yMin,
+          yUnit: that.props.chartMeta.yUnit,
+          chartIcon: that.props.chartMeta.chartIcon
         }) 
       })
       .catch(err => console.log(err))
@@ -104,31 +112,33 @@ class ChartCard extends Component {
  
   render() {
     const ExampleCustomInput = React.forwardRef(({ value, onClick }, ref) => (
-      <Button variant="outline-primary" size="xs" className="example-custom-input" onClick={onClick} ref={ref}>
+      <button variant="outline-primary" size="xs" className="example-custom-input card-button" onClick={onClick} ref={ref}>
         {value}
-      </Button>
+      </button>
     ));
 
     return (
       <Card>
-        <Card.Header className="ui-sortable-handle" style={{cursor: 'move'}}>
+        <Card.Header>
           <Card.Title>
-            <i className={this.state.chartIcon + " mr-1"} /> {this.state.title}
+            <i className={this.state.chartIcon + " mr-1 card-icon"} /> {this.state.title}
           </Card.Title>
           <div className="card-tools">
             <ul className="nav nav-pills ml-auto">
               <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-                <DatePicker className="nav-link" selected={this.state.fromDate} selectsRange timeInterval="10"
-                 onChange={(dates) => this.handleChange(dates)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy HH:mm" timeFormat="HH:mm" showTimeSelect
-                 startDate={this.state.fromDate} endDate={this.state.toDate} customInput={<ExampleCustomInput/>}/>                
+                <DatePicker className="nav-link" selected={this.state.fromDate} selectsStart timeInterval="10"
+                 onChange={(date) => this.handleChange(date, true)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy HH:mm" timeFormat="HH:mm" 
+                 showTimeSelect startDate={this.state.fromDate} endDate={this.state.toDate} maxDate={new Date()} 
+                 customInput={<ExampleCustomInput/>}/>                
               </li>
-              {/* TODO: DatePicker <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-              <DatePicker className="nav-link" selected={this.state.toDate} selectsEnd
-                 onChange={(date) => this.handleChange(date, false)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy hh:mm" showTimeInput
-                 startDate={this.state.fromDate} endDate={this.state.toDate}  minDate={this.state.fromDate} customInput={<ExampleCustomInput />}/>
-              </li> */}
               <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-                <Button variant="info" size="xs" onClick={this.updateChart.bind(this)}>Actualizar</Button>
+                <DatePicker className="nav-link" selected={this.state.toDate} selectsEnd
+                  onChange={(date) => this.handleChange(date, false)} timeInputLabel="Hora:" dateFormat="dd/MM/yyyy HH:mm" timeFormat="HH:mm" 
+                  showTimeSelect startDate={this.state.fromDate} endDate={this.state.toDate} maxDate={new Date()} minDate={this.state.fromDate} 
+                  customInput={<ExampleCustomInput />}/>
+              </li>
+              <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
+                <button className={'card-button-filled'} variant="info" size="xs" onClick={this.updateChart.bind(this)} id={'updateButton'}>Actualizar</button>
               </li>
             </ul>
           </div>

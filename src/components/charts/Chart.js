@@ -1,6 +1,6 @@
 import React from 'react';
 import 'chartjs-adapter-date-fns';
-import {Bar, Line, Pie} from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 class Chart extends React.Component {
 
@@ -98,7 +98,6 @@ function getBestAproximation(data) {
     let months = []
     let days = []
     let hours = []
-    console.log(data)
     for (let obj of data) {
         let date = new Date(obj.x)
         if(!years.some(i => i === date.getFullYear())) years.push(date.getFullYear())
@@ -113,8 +112,10 @@ function getBestAproximation(data) {
         return {time:{unit:'month', stepSize: 1}}
     } else if (days.length > 4) { // daily
         return {time:{unit:'day', stepSize: 1}}
-    } else { // hourly
+    } else if (days.length > 2){ // hourly
         return {time:{unit:'hour', stepSize: 3}}
+    } else {
+        return {time:{unit:'hour', stepSize: 1}}
     }
 
 }
