@@ -52,7 +52,7 @@ class LocationMap extends Component {
             <Card className="m-3">
                 <Card.Header className="ui-sortable-handle" style={{cursor: 'move'}}>
                     <Card.Title>
-                        <i className={"far fa-map mr-1"} /> {greenhouse.name}
+                        <i className={"far fa-map mr-1 card-icon"} /> {greenhouse.name}
                     </Card.Title>
                     <div className="card-tools">
                         <ul className="nav nav-pills ml-auto">
@@ -60,7 +60,7 @@ class LocationMap extends Component {
 
                         </li>
                         <li className="nav-item" style={{'marginLeft': '0.2em', 'marginRight': '0.2em'}}>
-                            <DropdownButton title={sensorDetail.title}>
+                            <DropdownButton title={sensorDetail.title} className="card-button">
                                 {getDropdownOptions(onClick, greenhouse.sensorIds)}
                             </DropdownButton>
                         </li>

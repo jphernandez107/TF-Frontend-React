@@ -1,0 +1,9 @@
+.card-button {
+    background-color: var(--light-green-a3);
+    border-color: var(--dark-green);
+    color: var(--dark-green);
+}
+
+.card-icon {
+    color: var(--dark-green)
+}
