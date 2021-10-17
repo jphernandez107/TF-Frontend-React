@@ -1,27 +1,33 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Button, Nav } from 'react-bootstrap'
  
  
 class Sidebar extends React.Component {
 
-
- 
+    
+    
   render() {
-
+    let currentPath = window.location.pathname
+    let greenhouseSelected = ''
+    let homepage = 'active'
     let greenhouses = this.props.greenhouses; // array de objetos -> [{greenhouseName: 'A'}]
     let greenhouseList = greenhouses.map(function(greenhouse) { 
-            if (greenhouse.id) {
-                return (
-                    <Nav.Item key={"id:" + greenhouse.id}>
-                        <a href={greenhouse.href} className={"nav-link "}>
-                            <i className="far fa-hand-holding-seedling nav-icon"></i>
-                            <p>{greenhouse.name}</p>
-                        </a>
-                    </Nav.Item>
-                )
-            } else {
-                return(<></>)
-            }
+        if (greenhouse.id) {
+            let active = greenhouse.href === currentPath ? 'active' : ''
+            greenhouseSelected = greenhouse.href === currentPath ? 'menu-open active' : greenhouseSelected
+            homepage = greenhouse.href === currentPath ? '' : homepage
+            return (
+                <Nav.Item key={"id:" + greenhouse.id}>
+                    <Nav.Link href={greenhouse.href} className={active}>
+                        <i className="far fa-hand-holding-seedling nav-icon"></i>
+                        <p>{greenhouse.name}</p>
+                    </Nav.Link>
+                </Nav.Item>
+            )
+        } else {
+            return(<></>)
+        }
         }
     )
  
@@ -35,64 +41,21 @@ class Sidebar extends React.Component {
 
             <div className="sidebar">
 
-                <div className="form-inline">
-                    <div className="input-group" data-widget="sidebar-search">
-                        <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search"></input>
-                        <div className="input-group-append">
-                            <Button className="btn-sidebar">
-                                <i className="fas fa-search fa-fw"></i>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-
                 <nav className="mt-2">
                     <Nav className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <Nav.Item>
-                            <a href="/" className="nav-link">
+                            <a href="/" className={`nav-link ${homepage}`}>
                                 <i className="nav-icon fas fa-th"></i>
-                                <p>Inicio <span className="right badge badge-danger">Nuevo</span></p>
+                                <p>Inicio</p>
                             </a>
                         </Nav.Item>
-                        <Nav.Item className="menu-open">
-                            <a href="#" className="nav-link active">
+                        <Nav.Item className={greenhouseSelected}>
+                            <Nav.Link eventKey="greenhouses-dropdown" className={`${greenhouseSelected}`}>
                                 <i className="nav-icon fas fa-hand-holding-seedling"></i>
                                 <p> Invernaderos <i className="right fas fa-angle-left"></i> </p>
-                            </a>
+                            </Nav.Link>
                             <Nav className="nav nav-treeview">
                                 {greenhouseList}
-                            </Nav>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <a href="#" className="nav-link">
-                                <i className="nav-icon fas fa-chart-pie"></i>
-                                <p> Gráficas <i className="right fas fa-angle-left"></i></p>
-                            </a>
-                            <Nav className="nav nav-treeview">
-                                <Nav.Item>
-                                    <a href="AdminLTE/pages/charts/chartjs.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>ChartJS</p>
-                                    </a>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <a href="AdminLTE/pages/charts/flot.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>Flot</p>
-                                    </a>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <a href="AdminLTE/pages/charts/inline.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>Inline</p>
-                                    </a>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <a href="AdminLTE/pages/charts/uplot.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>uPlot</p>
-                                    </a>
-                                </Nav.Item>
                             </Nav>
                         </Nav.Item>
                     </Nav>
