@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ChartCard from '../chartCard/ChartCard';
-import HeaderBody from '../home/HeaderBody';
-import Section from '../helpers/Section';
-import LocationMap from '../locationMap/LocationMap';
+import ChartCard from '../../chartCard/ChartCard';
+import HeaderBody from '../HeaderBody';
+import Section from '../../helpers/Section';
+import LocationMap from '../../locationMap/LocationMap';
 
 class Grid extends React.Component {
  

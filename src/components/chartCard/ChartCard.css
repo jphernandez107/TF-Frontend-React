@@ -8,7 +8,7 @@
     color: var(--dark-green)
 }
 
-.card-button, .card-button-filled:hover {
+.card-button {
     background-color: var(--light-green-a3);
     color: var(--dark-green);
     border-color: var(--dark-green-a4);

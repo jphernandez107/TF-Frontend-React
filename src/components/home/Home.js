@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
 import Sidebar from '../sidebar/Sidebar';
-import Grid from './Grid';
-import General from './General';
+import Grid from './details/Grid';
+import General from './generalDashboard/General';
 import Menu from '../menu/Menu';
 
 

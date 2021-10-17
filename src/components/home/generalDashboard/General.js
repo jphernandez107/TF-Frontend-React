@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import SmallCard from '../cards/SmallCard';
-import HeaderBody from './HeaderBody';
+import SmallCard from '../../cards/SmallCard';
+import HeaderBody from '../HeaderBody';
 
-const api = require('../../api/Api')
+const api = require('../../../api/Api')
 
 class General extends Component {
 
