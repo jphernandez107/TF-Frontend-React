@@ -3,8 +3,6 @@ import Card from 'react-bootstrap/Card';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { Button } from 'react-bootstrap'
-
 import Chart from '../charts/Chart'
 const Utils = require('../../utils/Utils');
 const api = require('../../api/Api')

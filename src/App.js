@@ -3,6 +3,7 @@ import './App.css';
 import './components/locationMap/LocationMap.css';
 import './components/chartCard/ChartCard.css';
 import './components/sidebar/Sidebar.css';
+import './components/menu/Menu.css';
 
 // import Menu from './components/menu/Menu'
 import Home from './components/home/Home'

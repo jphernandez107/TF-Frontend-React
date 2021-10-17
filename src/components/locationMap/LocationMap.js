@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Card from 'react-bootstrap/Card';
 
-import { Dropdown, DropdownButton } from 'react-bootstrap'
+import { Dropdown } from 'react-bootstrap'
 
 const Utils = require('../../utils/Utils');
 
