@@ -6,7 +6,6 @@ import Sidebar from '../sidebar/Sidebar';
 import Grid from './Grid';
 import General from './General';
 import Menu from '../menu/Menu';
-import LocationMap from '../locationMap/LocationMap';
 
 
 class Home extends React.Component {
