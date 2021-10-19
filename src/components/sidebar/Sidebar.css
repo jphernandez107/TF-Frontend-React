@@ -1,3 +1,7 @@
 .nav-icon {
     color: var(--light-green);
 }
+
+.nav-icon-white {
+    color: var(--white);
+}

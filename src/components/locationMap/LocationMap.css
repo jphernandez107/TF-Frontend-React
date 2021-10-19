@@ -7,9 +7,8 @@
 }
 
 .sector-cell {
-    background-color: var(--dark-green);
+    background-color: var(--dark-green-a4);
     border: 1px solid black;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     display: flex;
     align-items: flex-start;
     position: relative;

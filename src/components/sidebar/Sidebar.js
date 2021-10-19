@@ -45,14 +45,14 @@ class Sidebar extends React.Component {
                     <Nav className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <Nav.Item>
                             <a href="/" className={`nav-link ${homepage}`}>
-                                <i className="nav-icon fas fa-th"></i>
+                                <i className="nav-icon fas fa-th nav-icon-white"></i>
                                 <p>Inicio</p>
                             </a>
                         </Nav.Item>
                         <Nav.Item className={greenhouseSelected}>
                             <Nav.Link eventKey="greenhouses-dropdown" className={`${greenhouseSelected}`}>
-                                <i className="nav-icon fas fa-hand-holding-seedling"></i>
-                                <p> Invernaderos <i className="right fas fa-angle-left"></i> </p>
+                                <i className="nav-icon fas fa-hand-holding-seedling nav-icon-white"></i>
+                                <p> Invernaderos <i className="right fas fa-angle-left nav-icon-white"></i> </p>
                             </Nav.Link>
                             <Nav className="nav nav-treeview">
                                 {greenhouseList}
