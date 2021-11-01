@@ -54,7 +54,7 @@ function getChart(section, location) {
     let sensorIds = location.sensorIds
     let charts = []
     for (let i=section; sensorIds && i<sensorIds.length; i+=2) {
-        charts.push(<ChartCard key={`chart-${sensorIds[i]}`} sensorIds={[sensorIds[i]]} chartMeta={getChartMeta(sensorIds[i])} location={[{greenhouse: location.greenhouse}]}/>)
+        charts.push(<ChartCard key={`chart-${sensorIds[i]}`} sensorIds={[sensorIds[i]]} chartMeta={getChartMeta(sensorIds[i])} locations={[{greenhouse: location.greenhouse}]}/>)
     }
     return (charts)
 }
