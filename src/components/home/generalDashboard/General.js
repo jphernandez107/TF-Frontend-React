@@ -142,7 +142,7 @@ const ambientTempStyle = (value, href) => {
             href: href
         },
         size:"4",
-        color: "bg-orange"
+        color: "bg-olive"
     }
 }
 
@@ -158,7 +158,7 @@ const ambientHumStyle = (value, href) => {
             href: href
         },
         size:"4",
-        color: "bg-lightblue"
+        color: "bg-olive"
     }
 }
 
